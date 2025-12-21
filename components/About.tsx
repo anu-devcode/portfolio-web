@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
-import { Code, Database, Cloud, Brain, Cpu, Rocket } from 'lucide-react';
+import { Code, Database, Cloud, Brain, Rocket } from 'lucide-react';
 import { useLocalizedConfig } from '@/hooks/useLocalizedConfig';
 import Section3DBackground from '@/components/3D/Section3DBackground';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
@@ -10,7 +10,7 @@ import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 export default function About() {
   const t = useTranslations('about');
   const config = useLocalizedConfig();
-  const { ref, isInView } = useScrollAnimation({ threshold: 0.2 });
+  const { ref, isInView } = useScrollAnimation({ threshold: 0.1 });
 
   const skills = [
     { 
@@ -48,39 +48,43 @@ export default function About() {
   ];
 
   return (
-    <section id="about" className="relative py-32 overflow-hidden" ref={ref}>
+    <section id="about" className="relative py-24 md:py-32 overflow-hidden" ref={ref}>
       {/* 3D Background */}
       <Section3DBackground 
         intensity={0.25}
-        particleCount={25}
-        objectCount={4}
+        layerCount={3}
+        blockCount={6}
+        nodeCount={10}
+        planeCount={2}
         className="opacity-40"
       />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="text-center mb-20"
+          transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+          className="text-center mb-16 md:mb-20"
         >
-          <div className="inline-flex items-center space-x-2 px-4 py-2 glass rounded-full border border-cyan-400/30 mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 glass rounded-full border border-cyan-400/20 mb-6">
             <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse" />
-            <span className="text-sm font-medium text-cyan-400 uppercase tracking-wider">
+            <span className="text-xs font-medium text-cyan-400 uppercase tracking-wider">
               {t('status')}
             </span>
           </div>
-          <h2 className="text-4xl md:text-6xl font-bold mb-6 font-display">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 text-glow-cyan">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 font-display relative">
+            <span className="relative z-10 text-neon-cyan">
               {t('title')}
             </span>
           </h2>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto font-light leading-relaxed">
+          <p className="text-lg sm:text-xl text-gray-400 max-w-3xl mx-auto font-light leading-relaxed">
             {config.personalInfo.bio}
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Skills Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {skills.map((skill, index) => {
             const Icon = skill.icon;
             return (
@@ -89,27 +93,27 @@ export default function About() {
                 initial={{ opacity: 0, y: 50, rotateY: -15 }}
                 whileInView={{ opacity: 1, y: 0, rotateY: 0 }}
                 viewport={{ once: true, margin: '-50px' }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={{ y: -8, rotateY: 5 }}
+                transition={{ duration: 0.6, delay: index * 0.1, ease: [0.25, 0.1, 0.25, 1] }}
+                whileHover={{ y: -6, rotateY: 3 }}
                 className="group perspective-3d transform-3d"
               >
-                <div className="h-full glass-strong rounded-2xl p-6 border border-cyan-400/20 hover:border-cyan-400/50 transition-all duration-300 hover-lift relative overflow-hidden">
-                  {/* Gradient background */}
+                <div className="h-full glass-strong rounded-2xl p-6 border border-cyan-400/20 hover:border-cyan-400/40 transition-all duration-300 hover-lift relative overflow-hidden">
+                  {/* Gradient Background */}
                   <div className={`absolute inset-0 bg-gradient-to-br ${skill.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
                   
-                  {/* Icon with Gradient */}
-                  <div className="relative z-10 mb-4">
-                    <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${skill.iconGradient} flex items-center justify-center border border-cyan-400/30 group-hover:border-cyan-400/60 transition-colors shadow-lg`}>
-                      <Icon className="w-8 h-8 text-white" />
+                  {/* Icon */}
+                  <div className="relative z-10 mb-5">
+                    <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${skill.iconGradient} flex items-center justify-center border border-cyan-400/30 group-hover:border-cyan-400/60 transition-colors shadow-lg group-hover:scale-110 duration-300`}>
+                      <Icon className="w-7 h-7 text-white" />
                     </div>
                   </div>
                   
                   {/* Content */}
                   <div className="relative z-10">
-                    <h3 className="text-lg font-bold text-white mb-4 font-display uppercase tracking-tight">
+                    <h3 className="text-base md:text-lg font-bold text-white mb-4 font-display uppercase tracking-tight">
                       {skill.name}
                     </h3>
-                    <ul className="space-y-2">
+                    <ul className="space-y-2.5">
                       {skill.technologies.map((tech, techIndex) => (
                         <motion.li
                           key={tech}
@@ -119,14 +123,14 @@ export default function About() {
                           transition={{ delay: index * 0.1 + techIndex * 0.05 }}
                           className="flex items-center text-gray-400 text-sm font-light"
                         >
-                          <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full mr-3" />
-                          {tech}
+                          <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full mr-3 flex-shrink-0" />
+                          <span>{tech}</span>
                         </motion.li>
                       ))}
                     </ul>
                   </div>
 
-                  {/* Hover glow */}
+                  {/* Hover Glow */}
                   <motion.div
                     className={`absolute inset-0 rounded-2xl glow-${skill.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none`}
                   />
@@ -137,7 +141,7 @@ export default function About() {
         </div>
       </div>
 
-      {/* Section divider */}
+      {/* Section Divider */}
       <div className="absolute bottom-0 left-0 right-0 h-px neural-line opacity-20" />
     </section>
   );

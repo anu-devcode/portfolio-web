@@ -1,6 +1,7 @@
 'use client';
 
 import { useLocale } from 'next-intl';
+import { usePathname } from '@/i18n/routing';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ReactNode } from 'react';
 
@@ -9,22 +10,24 @@ interface PageTransitionProps {
 }
 
 /**
- * Page transition wrapper for smooth language switching
- * Prevents page "reverting" with smooth fade animations
+ * Enhanced page transition wrapper
+ * Creates smooth, calm transitions between pages and language changes
  */
 export default function PageTransition({ children }: PageTransitionProps) {
   const locale = useLocale();
+  const pathname = usePathname();
+  const key = `${locale}-${pathname}`;
 
   return (
     <AnimatePresence mode="wait" initial={false}>
       <motion.div
-        key={locale}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
+        key={key}
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -8 }}
         transition={{
-          duration: 0.25,
-          ease: [0.25, 0.46, 0.45, 0.94],
+          duration: 0.4,
+          ease: [0.25, 0.1, 0.25, 1], // Calm, smooth easing
         }}
         className="w-full"
       >

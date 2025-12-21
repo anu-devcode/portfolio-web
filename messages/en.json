@@ -2,6 +2,7 @@
   "nav": {
     "home": "Home",
     "about": "About",
+    "services": "Services",
     "projects": "Projects",
     "contact": "Contact"
   },
@@ -19,10 +20,11 @@
       "grow": "Grow."
     },
     "services": {
-      "backend": "Backend Development",
-      "ai": "AI & Automation",
-      "freelance": "Freelance Projects"
+      "backend": "Backend Systems",
+      "ai": "Intelligent Automation",
+      "freelance": "Client & Product Work"
     },
+    "workOn": "What I Work On",
     "scroll": "Scroll"
   },
   "about": {
@@ -115,6 +117,90 @@
     "quickLinks": "Quick Links",
     "connect": "Connect",
     "copyright": "Portfolio"
+  },
+  "services": {
+    "title": "Services & Skills",
+    "subtitle": "Comprehensive development services and technical expertise to bring your ideas to life",
+    "status": "Available",
+    "servicesTitle": "Services",
+    "skillsTitle": "Technical Skills",
+    "learnMore": "Learn More",
+    "items": {
+      "backend": {
+        "title": "Backend Development",
+        "description": "Robust server-side solutions with scalable architecture and high performance.",
+        "features": [
+          "RESTful & GraphQL APIs",
+          "Database Design & Optimization",
+          "Microservices Architecture",
+          "Real-time Communication"
+        ]
+      },
+      "frontend": {
+        "title": "Frontend Development",
+        "description": "Modern, responsive user interfaces with exceptional user experience.",
+        "features": [
+          "Responsive Design",
+          "Interactive Animations",
+          "Performance Optimization",
+          "Cross-browser Compatibility"
+        ]
+      },
+      "fullstack": {
+        "title": "Full-Stack Development",
+        "description": "End-to-end solutions from concept to deployment with seamless integration.",
+        "features": [
+          "Complete Web Applications",
+          "API Integration",
+          "Database Management",
+          "Deployment & DevOps"
+        ]
+      },
+      "ai": {
+        "title": "AI & Machine Learning",
+        "description": "Intelligent solutions powered by AI and machine learning technologies.",
+        "features": [
+          "AI Integration",
+          "Machine Learning Models",
+          "Natural Language Processing",
+          "Automation Systems"
+        ]
+      },
+      "cloud": {
+        "title": "Cloud & DevOps",
+        "description": "Scalable cloud infrastructure and automated deployment pipelines.",
+        "features": [
+          "Cloud Architecture",
+          "Container Orchestration",
+          "CI/CD Pipelines",
+          "Infrastructure as Code"
+        ]
+      },
+      "mobile": {
+        "title": "Mobile Development",
+        "description": "Native and cross-platform mobile applications for iOS and Android.",
+        "features": [
+          "React Native Apps",
+          "Progressive Web Apps",
+          "Mobile UI/UX Design",
+          "App Store Deployment"
+        ]
+      }
+    },
+    "skills": {
+      "backend": {
+        "name": "Backend Technologies"
+      },
+      "frontend": {
+        "name": "Frontend Technologies"
+      },
+      "tools": {
+        "name": "DevOps & Tools"
+      },
+      "ai": {
+        "name": "AI & Machine Learning"
+      }
+    }
   },
   "config": {
     "personalInfo": {

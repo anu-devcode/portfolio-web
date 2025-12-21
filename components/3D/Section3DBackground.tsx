@@ -3,63 +3,67 @@
 import { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { PerspectiveCamera } from '@react-three/drei';
-import FloatingParticles from './FloatingParticles';
-import FloatingElements from './FloatingElements';
+import ArchitecturalElements from './ArchitecturalElements';
+import ThemeAwareLighting from './ThemeAwareLighting';
 import Loading3D from './Loading3D';
 
 interface Section3DBackgroundProps {
   intensity?: number;
-  particleCount?: number;
-  objectCount?: number;
+  layerCount?: number;
+  blockCount?: number;
+  nodeCount?: number;
+  planeCount?: number;
   className?: string;
 }
 
 /**
  * 3D Background for any section
- * Provides consistent 3D elements throughout the site
+ * Abstract architectural elements - minimal, professional system architecture feel
  */
 export default function Section3DBackground({
-  intensity = 0.3,
-  particleCount = 30,
-  objectCount = 3,
+  intensity = 0.25,
+  layerCount = 3,
+  blockCount = 6,
+  nodeCount = 10,
+  planeCount = 2,
   className = '',
 }: Section3DBackgroundProps) {
 
   return (
     <div className={`absolute inset-0 w-full h-full pointer-events-none overflow-hidden ${className}`}>
-      {/* Gradient overlay - enhanced for light mode */}
-      <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-blue-500/5 to-purple-500/5 backdrop-blur-[1px] z-10" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(0,102,255,0.08),transparent_60%)] z-9" />
+      {/* Subtle gradient overlay - minimal and professional */}
+      <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/3 via-blue-500/2 to-purple-500/3 backdrop-blur-[0.5px] z-10 opacity-40 dark:opacity-20" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(0,102,255,0.08),transparent_70%)] z-9 opacity-35 dark:opacity-15" />
       
-      {/* 3D Canvas */}
+      {/* 3D Canvas with architectural elements */}
       <Suspense fallback={<Loading3D />}>
         <Canvas
           gl={{ antialias: true, alpha: true }}
           dpr={[1, 1.5]}
-          className="w-full h-full opacity-30"
+          className="w-full h-full opacity-50 dark:opacity-8 transition-opacity"
         >
-          {/* Lighting */}
-          <ambientLight intensity={intensity} />
-          <pointLight position={[10, 10, 10]} intensity={0.5} color="#00f0ff" />
-          <pointLight position={[-10, -10, -10]} intensity={0.4} color="#0066ff" />
+          {/* Subtle lighting - calm and professional, theme-aware */}
+          <ThemeAwareLighting intensity={intensity} />
 
           {/* Camera */}
           <PerspectiveCamera
             makeDefault
-            position={[0, 0, 12]}
+            position={[0, 0, 15]}
             fov={75}
           />
 
-          {/* Floating 3D Elements */}
-          <FloatingElements count={objectCount} />
-
-          {/* Floating Particles */}
-          <FloatingParticles count={particleCount} />
+          {/* Abstract architectural elements */}
+          <ArchitecturalElements
+            layerCount={layerCount}
+            blockCount={blockCount}
+            nodeCount={nodeCount}
+            planeCount={planeCount}
+          />
         </Canvas>
       </Suspense>
 
-      {/* Additional visual effects */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,240,255,0.08),transparent_70%)] z-5" />
+      {/* Minimal visual accent */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,240,255,0.03),transparent_80%)] z-5 opacity-15 dark:opacity-15" />
     </div>
   );
 }

@@ -8,27 +8,29 @@ interface ScrollRevealProps {
   delay?: number;
   direction?: 'up' | 'down' | 'left' | 'right' | 'fade';
   className?: string;
+  amount?: number;
 }
 
 /**
- * Scroll reveal animation component
- * Inspired by Framer Awards smooth scroll animations
+ * Enhanced scroll reveal animation component
+ * Creates calm, continuous reveal animations
  */
 export default function ScrollReveal({
   children,
   delay = 0,
   direction = 'up',
   className = '',
+  amount = 0.15,
 }: ScrollRevealProps) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.2 });
+  const isInView = useInView(ref, { once: true, amount, margin: '-50px' });
 
   const variants = {
     hidden: {
       opacity: 0,
-      y: direction === 'up' ? 50 : direction === 'down' ? -50 : 0,
-      x: direction === 'left' ? 50 : direction === 'right' ? -50 : 0,
-      scale: direction === 'fade' ? 0.95 : 1,
+      y: direction === 'up' ? 30 : direction === 'down' ? -30 : 0,
+      x: direction === 'left' ? 30 : direction === 'right' ? -30 : 0,
+      scale: direction === 'fade' ? 0.98 : 1,
     },
     visible: {
       opacity: 1,
@@ -36,9 +38,9 @@ export default function ScrollReveal({
       x: 0,
       scale: 1,
       transition: {
-        duration: 0.8,
+        duration: 0.6,
         delay,
-        ease: [0.25, 0.46, 0.45, 0.94], // Smooth easing like Framer Awards
+        ease: [0.25, 0.1, 0.25, 1], // Calm, smooth easing
       },
     },
   };

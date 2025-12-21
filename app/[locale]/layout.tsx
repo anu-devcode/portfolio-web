@@ -12,7 +12,9 @@ import NeuralBackground from '@/components/NeuralBackground';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import SmoothScroll from '@/components/SmoothScroll';
 import PageTransition from '@/components/PageTransition';
+import ScrollProgress from '@/components/ScrollProgress';
 import { generateMetadata } from './metadata';
+import { getTextDirection } from '@/lib/locale-utils';
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -47,8 +49,12 @@ export default async function LocaleLayout({
 
   const messages = await getMessages();
 
+  // Determine text direction: Only RTL languages should use RTL
+  // English (en) and Amharic (am) are both LTR languages
+  const dir = getTextDirection(locale);
+
   return (
-    <html lang={locale} dir={locale === 'am' ? 'rtl' : 'ltr'}>
+    <html lang={locale} dir={dir}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#0ea5e9" />
@@ -99,6 +105,7 @@ export default async function LocaleLayout({
             <ThemeProvider>
               <NextIntlClientProvider messages={messages}>
                 <SmoothScroll />
+                <ScrollProgress />
                 <PageTransition>
                   <div className="min-h-screen flex flex-col relative">
                     <NeuralBackground />

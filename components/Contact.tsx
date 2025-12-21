@@ -11,7 +11,7 @@ import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 export default function Contact() {
   const t = useTranslations('contact');
   const config = useLocalizedConfig();
-  const { ref, isInView } = useScrollAnimation({ threshold: 0.2 });
+  const { ref, isInView } = useScrollAnimation({ threshold: 0.1 });
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -39,13 +39,11 @@ export default function Contact() {
       const data = await response.json();
 
       if (!response.ok) {
-        // Handle rate limiting
         if (response.status === 429) {
           const retryAfter = response.headers.get('Retry-After');
           throw new Error(`Too many requests. Please try again in ${retryAfter || 'a few'} seconds.`);
         }
         
-        // Handle validation errors
         if (data.errors && Array.isArray(data.errors)) {
           throw new Error(data.errors.join(', '));
         }
@@ -59,8 +57,6 @@ export default function Contact() {
     } catch (error) {
       console.error('Contact form error:', error);
       setStatus('error');
-      // Store error message for display
-      const errorMessage = error instanceof Error ? error.message : t('error');
       setTimeout(() => {
         setStatus('idle');
       }, 5000);
@@ -81,46 +77,50 @@ export default function Contact() {
   ];
 
   return (
-    <section id="contact" className="relative py-32 overflow-hidden" ref={ref}>
+    <section id="contact" className="relative py-24 md:py-32 overflow-hidden" ref={ref}>
       {/* 3D Background */}
       <Section3DBackground 
         intensity={0.25}
-        particleCount={30}
-        objectCount={4}
+        layerCount={3}
+        blockCount={6}
+        nodeCount={10}
+        planeCount={2}
         className="opacity-40"
       />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="text-center mb-20"
+          transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+          className="text-center mb-16 md:mb-20"
         >
-          <div className="inline-flex items-center space-x-2 px-4 py-2 glass rounded-full border border-cyan-400/30 mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 glass rounded-full border border-cyan-400/20 mb-6">
             <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse" />
-            <span className="text-sm font-medium text-cyan-400 uppercase tracking-wider">
+            <span className="text-xs font-medium text-cyan-400 uppercase tracking-wider">
               {t('status')}
             </span>
           </div>
-          <h2 className="text-4xl md:text-6xl font-bold mb-6 font-display">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 text-glow-cyan">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 font-display relative">
+            <span className="relative z-10 text-neon-cyan">
               {t('title')}
             </span>
           </h2>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto font-light leading-relaxed">
+          <p className="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto font-light leading-relaxed">
             {t('subtitle')}
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Contact Info */}
+        {/* Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
+          {/* Contact Info Cards */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="space-y-6"
+            transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+            className="space-y-4"
           >
             {contactInfo.map((info, index) => {
               const Icon = info.icon;
@@ -130,19 +130,21 @@ export default function Contact() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ x: 10 }}
-                  className="glass-strong rounded-xl p-6 border border-cyan-400/20 hover:border-cyan-400/50 transition-all cursor-glow"
+                  transition={{ delay: index * 0.1, ease: [0.25, 0.1, 0.25, 1] }}
+                  whileHover={{ x: 8, scale: 1.02 }}
+                  className="glass-strong rounded-2xl p-6 border border-cyan-400/20 hover:border-cyan-400/40 transition-all duration-300"
                 >
-                  <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 glass rounded-lg flex items-center justify-center border border-cyan-400/30">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 glass rounded-xl flex items-center justify-center border border-cyan-400/20 flex-shrink-0">
                       <Icon className="w-6 h-6 text-cyan-400" />
                     </div>
-                    <div>
-                      <h3 className="font-semibold text-white mb-1 uppercase tracking-wider text-sm">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-white mb-1.5 uppercase tracking-wider text-sm">
                         {info.label}
                       </h3>
-                      <p className="text-gray-400 font-light">{info.value}</p>
+                      <p className="text-gray-400 font-light text-sm break-words">
+                        {info.value}
+                      </p>
                     </div>
                   </div>
                 </motion.div>
@@ -155,11 +157,12 @@ export default function Contact() {
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
             onSubmit={handleSubmit}
-            className="glass-strong rounded-2xl p-8 border border-cyan-400/20"
+            className="glass-strong rounded-2xl p-6 md:p-8 border border-cyan-400/20"
           >
-            <div className="space-y-6">
+            <div className="space-y-5">
+              {/* Name Field */}
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2 uppercase tracking-wider">
                   {t('name')}
@@ -176,6 +179,7 @@ export default function Contact() {
                 />
               </div>
               
+              {/* Email Field */}
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2 uppercase tracking-wider">
                   {t('email')}
@@ -192,6 +196,7 @@ export default function Contact() {
                 />
               </div>
               
+              {/* Message Field */}
               <div>
                 <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2 uppercase tracking-wider">
                   {t('message')}
@@ -208,42 +213,44 @@ export default function Contact() {
                 />
               </div>
               
+              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={status === 'sending'}
-                className="w-full btn-futuristic relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full btn-futuristic relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed py-3.5"
               >
-                <span className="relative z-10 flex items-center justify-center">
+                <span className="relative z-10 flex items-center justify-center gap-2">
                   {status === 'sending' ? (
                     <>
                       <motion.div
                         animate={{ rotate: 360 }}
                         transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                        className="w-5 h-5 border-2 border-cyan-400 border-t-transparent rounded-full mr-2"
+                        className="w-5 h-5 border-2 border-cyan-400 border-t-transparent rounded-full"
                       />
                       {t('sending')}
                     </>
                   ) : status === 'success' ? (
                     <>
-                      <CheckCircle className="w-5 h-5 mr-2" />
+                      <CheckCircle className="w-5 h-5" />
                       {t('success')}
                     </>
                   ) : (
                     <>
-                      <Send className="w-5 h-5 mr-2" />
+                      <Send className="w-5 h-5" />
                       {t('send')}
                     </>
                   )}
                 </span>
               </button>
               
+              {/* Error Message */}
               {status === 'error' && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="flex items-center space-x-2 text-red-400 glass rounded-lg p-4 border border-red-400/30"
+                  className="flex items-center gap-2 text-red-400 glass rounded-lg p-4 border border-red-400/30"
                 >
-                  <AlertCircle className="w-5 h-5" />
+                  <AlertCircle className="w-5 h-5 flex-shrink-0" />
                   <span className="text-sm">{t('error')}</span>
                 </motion.div>
               )}
@@ -251,6 +258,9 @@ export default function Contact() {
           </motion.form>
         </div>
       </div>
+
+      {/* Section Divider */}
+      <div className="absolute bottom-0 left-0 right-0 h-px neural-line opacity-20" />
     </section>
   );
 }
