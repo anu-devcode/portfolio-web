@@ -1,0 +1,1005 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-inter: 'Inter', system-ui, sans-serif;
+  --font-space-grotesk: 'Space Grotesk', system-ui, sans-serif;
+  
+  /* Futuristic color palette */
+  --charcoal-900: #000000;
+  --charcoal-800: #050505;
+  --charcoal-700: #0f0f0f;
+  --charcoal-600: #1a1a1a;
+  
+  --cyan-400: #00f0ff;
+  --cyan-500: #00d9ff;
+  --neon-blue: #0066ff;
+  --neon-purple: #8b5cf6;
+  --neon-magenta: #ec4899;
+  
+  --accent-orange: #ff6b35;
+  --accent-green: #10b981;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-inter);
+  background: linear-gradient(135deg, #000000 0%, #050505 50%, #0f0f0f 100%);
+  color: #ffffff;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Light theme styles - Professional, Modern, Futuristic Design */
+html.light body {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 25%, #f1f5f9 50%, #e2e8f0 75%, #cbd5e1 100%);
+  color: #0f172a;
+  position: relative;
+  /* Add subtle texture for depth */
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(0, 240, 255, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(0, 102, 255, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 40% 20%, rgba(139, 92, 246, 0.02) 0%, transparent 50%);
+}
+
+/* Ensure all text is readable in light mode */
+html.light p,
+html.light span,
+html.light div,
+html.light li {
+  color: inherit;
+}
+
+/* Section backgrounds in light mode - keep transparent for glass effects */
+html.light section {
+  background: transparent;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #00f0ff, #0066ff);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #00d9ff, #0052cc);
+}
+
+html.light ::-webkit-scrollbar-track {
+  background: #e2e8f0;
+}
+
+html.light ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #0066ff, #8b5cf6);
+}
+
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #0052cc, #7c3aed);
+}
+
+/* Glassmorphism utility */
+@layer utilities {
+  .glass {
+    background: rgba(15, 15, 15, 0.4);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(0, 240, 255, 0.1);
+  }
+  
+  html.light .glass {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(0, 240, 255, 0.35);
+    box-shadow: 
+      0 8px 32px rgba(0, 102, 255, 0.12),
+      0 0 0 1px rgba(0, 240, 255, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8),
+      inset 0 -1px 0 rgba(0, 240, 255, 0.05);
+  }
+  
+  .glass-strong {
+    background: rgba(15, 15, 15, 0.6);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid rgba(0, 240, 255, 0.2);
+  }
+  
+  html.light .glass-strong {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid rgba(0, 240, 255, 0.45);
+    box-shadow: 
+      0 20px 40px rgba(0, 102, 255, 0.18),
+      0 0 0 1px rgba(0, 240, 255, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      inset 0 -1px 0 rgba(0, 240, 255, 0.08),
+      0 0 60px rgba(0, 240, 255, 0.12);
+  }
+  
+  .glow-cyan {
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.5),
+                0 0 40px rgba(0, 240, 255, 0.3),
+                inset 0 0 20px rgba(0, 240, 255, 0.1);
+  }
+  
+  html.light .glow-cyan {
+    box-shadow: 
+      0 0 25px rgba(0, 240, 255, 0.6),
+      0 0 50px rgba(0, 240, 255, 0.4),
+      inset 0 0 20px rgba(0, 240, 255, 0.2),
+      0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+  
+  .glow-blue {
+    box-shadow: 0 0 20px rgba(0, 102, 255, 0.5),
+                0 0 40px rgba(0, 102, 255, 0.3);
+  }
+  
+  html.light .glow-blue {
+    box-shadow: 0 0 25px rgba(0, 102, 255, 0.6),
+                0 0 50px rgba(0, 102, 255, 0.4);
+  }
+  
+  .glow-purple {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.5),
+                0 0 40px rgba(139, 92, 246, 0.3);
+  }
+  
+  html.light .glow-purple {
+    box-shadow: 0 0 25px rgba(139, 92, 246, 0.6),
+                0 0 50px rgba(139, 92, 246, 0.4);
+  }
+  
+  .glow-magenta {
+    box-shadow: 0 0 20px rgba(236, 72, 153, 0.5),
+                0 0 40px rgba(236, 72, 153, 0.3);
+  }
+  
+  html.light .glow-magenta {
+    box-shadow: 0 0 15px rgba(236, 72, 153, 0.4),
+                0 0 30px rgba(236, 72, 153, 0.2);
+  }
+  
+  .text-glow-cyan {
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.8),
+                 0 0 20px rgba(0, 240, 255, 0.5),
+                 0 0 30px rgba(0, 240, 255, 0.3);
+  }
+  
+  html.light .text-glow-cyan {
+    text-shadow: 0 0 15px rgba(0, 240, 255, 0.8),
+                 0 0 30px rgba(0, 240, 255, 0.5),
+                 0 0 45px rgba(0, 240, 255, 0.3);
+  }
+  
+  .text-glow-soft {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  }
+  
+  html.light .text-glow-soft {
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .gradient-name {
+    background: linear-gradient(135deg, #00f0ff 0%, #0066ff 50%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 20px rgba(0, 240, 255, 0.5));
+  }
+  
+  .gradient-slogan {
+    background: linear-gradient(135deg, #10b981 0%, #f59e0b 50%, #f97316 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  html.light .gradient-slogan {
+    background: linear-gradient(135deg, #059669 0%, #d97706 50%, #ea580c 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .perspective-3d {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+  }
+  
+  .transform-3d {
+    transform-style: preserve-3d;
+  }
+  
+  .hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-8px) translateZ(20px);
+    box-shadow: 0 20px 40px rgba(0, 240, 255, 0.3);
+  }
+  
+  html.light .hover-lift:hover {
+    transform: translateY(-8px) translateZ(20px);
+    box-shadow: 0 25px 50px rgba(0, 240, 255, 0.4),
+                0 0 60px rgba(0, 102, 255, 0.3);
+  }
+  
+  .border-glow {
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.2),
+                inset 0 0 10px rgba(0, 240, 255, 0.1);
+  }
+  
+  html.light .border-glow {
+    border: 1px solid rgba(0, 240, 255, 0.4);
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.3),
+                inset 0 0 15px rgba(0, 240, 255, 0.15);
+  }
+  
+  .border-glow-hover:hover {
+    border-color: rgba(0, 240, 255, 0.6);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.4),
+                inset 0 0 20px rgba(0, 240, 255, 0.2);
+  }
+  
+  html.light .border-glow-hover:hover {
+    border-color: rgba(0, 240, 255, 0.7);
+    box-shadow: 0 0 25px rgba(0, 240, 255, 0.5),
+                inset 0 0 25px rgba(0, 240, 255, 0.25);
+  }
+  
+  .neural-line {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(0, 240, 255, 0.3),
+      transparent
+    );
+    height: 1px;
+    animation: dataFlow 4s linear infinite;
+  }
+  
+  html.light .neural-line {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(0, 102, 255, 0.2),
+      transparent
+    );
+  }
+  
+  .neural-node {
+    width: 8px;
+    height: 8px;
+    background: rgba(0, 240, 255, 0.6);
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.8);
+    animation: neuralPulse 3s ease-in-out infinite;
+  }
+  
+  html.light .neural-node {
+    background: rgba(0, 102, 255, 0.6);
+    box-shadow: 0 0 8px rgba(0, 102, 255, 0.6);
+  }
+  
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Focus visible for accessibility */
+*:focus-visible {
+  outline: 2px solid rgba(0, 240, 255, 0.8);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+html.light *:focus-visible {
+  outline: 2px solid rgba(0, 102, 255, 0.8);
+}
+
+/* Selection */
+::selection {
+  background: rgba(0, 240, 255, 0.3);
+  color: #ffffff;
+}
+
+html.light ::selection {
+  background: rgba(0, 102, 255, 0.25);
+  color: #1e293b;
+}
+
+/* Neural network background pattern */
+.neural-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.1;
+  background-image: 
+    linear-gradient(rgba(0, 240, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: gridMove 20s linear infinite;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+html.light .neural-bg {
+  opacity: 0.2;
+  background-image: 
+    linear-gradient(rgba(0, 240, 255, 0.25) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.25) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Animated grid overlay */
+.grid-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background-image: 
+    radial-gradient(circle at 2px 2px, rgba(0, 240, 255, 0.15) 1px, transparent 0);
+  background-size: 40px 40px;
+  pointer-events: none;
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+}
+
+html.light .grid-overlay {
+  opacity: 0.25;
+  background-image: 
+    radial-gradient(circle at 2px 2px, rgba(0, 240, 255, 0.3) 1px, transparent 0);
+  background-size: 40px 40px;
+}
+
+/* Vignette effect */
+.vignette {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    rgba(0, 0, 0, 0.3) 70%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+}
+
+html.light .vignette {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    rgba(0, 102, 255, 0.05) 70%,
+    rgba(0, 102, 255, 0.15) 100%
+  );
+}
+
+/* Cursor glow effect */
+@media (hover: hover) {
+  .cursor-glow {
+    position: relative;
+  }
+  
+  .cursor-glow::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.2), transparent);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: -1;
+  }
+  
+  .cursor-glow:hover::before {
+    opacity: 1;
+  }
+  
+  html.light .cursor-glow::before {
+    background: radial-gradient(circle, rgba(0, 102, 255, 0.15), transparent);
+  }
+}
+
+/* Smooth section transitions */
+section {
+  position: relative;
+  z-index: 10;
+}
+
+/* Status indicators */
+.status-processing {
+  position: relative;
+  color: var(--cyan-400);
+}
+
+html.light .status-processing {
+  color: #0066ff;
+}
+
+.status-processing::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--cyan-400);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--cyan-400);
+  animation: neuralPulse 1.5s ease-in-out infinite;
+  margin-left: 8px;
+}
+
+html.light .status-processing::after {
+  background: #0066ff;
+  box-shadow: 0 0 12px rgba(0, 102, 255, 0.7);
+}
+
+.status-learning {
+  color: var(--neon-purple);
+}
+
+html.light .status-learning {
+  color: #8b5cf6;
+}
+
+.status-deploying {
+  color: var(--accent-green);
+}
+
+html.light .status-deploying {
+  color: #059669;
+}
+
+/* Typography enhancements */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-space-grotesk);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: inherit;
+}
+
+html.light h1, html.light h2, html.light h3, html.light h4, html.light h5, html.light h6 {
+  color: #0f172a;
+}
+
+h1 {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+h2 {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* Button styles */
+.btn-futuristic {
+  position: relative;
+  padding: 12px 32px;
+  background: transparent;
+  border: 1px solid rgba(0, 240, 255, 0.4);
+  color: #00f0ff;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+html.light .btn-futuristic {
+  border: 1px solid rgba(0, 102, 255, 0.5);
+  color: #0066ff;
+  background: rgba(0, 102, 255, 0.08);
+}
+
+.btn-futuristic::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+html.light .btn-futuristic::before {
+  background: linear-gradient(90deg, transparent, rgba(0, 102, 255, 0.2), transparent);
+}
+
+.btn-futuristic:hover::before {
+  left: 100%;
+}
+
+.btn-futuristic:hover {
+  border-color: rgba(0, 240, 255, 0.8);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.4),
+              inset 0 0 20px rgba(0, 240, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+html.light .btn-futuristic:hover {
+  border-color: rgba(0, 102, 255, 0.8);
+  box-shadow: 
+    0 0 25px rgba(0, 102, 255, 0.4),
+    inset 0 0 25px rgba(0, 102, 255, 0.15),
+    0 0 50px rgba(0, 102, 255, 0.25);
+  transform: translateY(-2px);
+  background: rgba(0, 102, 255, 0.12);
+}
+
+/* Light theme comprehensive overrides */
+html.light {
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-tertiary: #64748b;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+}
+
+/* Text color overrides */
+html.light .text-white {
+  color: #0f172a !important;
+}
+
+html.light .text-gray-100 {
+  color: #f1f5f9 !important;
+}
+
+html.light .text-gray-200 {
+  color: #e2e8f0 !important;
+}
+
+html.light .text-gray-300 {
+  color: #475569 !important;
+}
+
+html.light .text-gray-400 {
+  color: #64748b !important;
+}
+
+html.light .text-gray-500 {
+  color: #64748b !important;
+}
+
+html.light .text-gray-600 {
+  color: #475569 !important;
+}
+
+html.light .text-cyan-400,
+html.light .text-cyan-500 {
+  color: #0066ff !important;
+}
+
+html.light .text-blue-400,
+html.light .text-blue-500 {
+  color: #2563eb !important;
+}
+
+html.light .text-purple-400,
+html.light .text-purple-500 {
+  color: #7c3aed !important;
+}
+
+/* Background color overrides */
+html.light .bg-charcoal-50,
+html.light .bg-charcoal-100,
+html.light .bg-charcoal-200,
+html.light .bg-charcoal-600,
+html.light .bg-charcoal-700,
+html.light .bg-charcoal-800,
+html.light .bg-charcoal-900 {
+  background-color: #ffffff !important;
+}
+
+html.light .bg-cyan-400\/10,
+html.light .bg-cyan-500\/10 {
+  background-color: rgba(0, 102, 255, 0.1) !important;
+}
+
+html.light .bg-blue-400\/10,
+html.light .bg-blue-500\/10 {
+  background-color: rgba(37, 99, 235, 0.08) !important;
+}
+
+html.light .bg-purple-400\/10,
+html.light .bg-purple-500\/10 {
+  background-color: rgba(124, 58, 237, 0.08) !important;
+}
+
+/* Border color overrides */
+html.light .border-cyan-400\/10,
+html.light .border-cyan-400\/20,
+html.light .border-cyan-400\/30 {
+  border-color: rgba(0, 102, 255, 0.3) !important;
+}
+
+html.light .border-cyan-400\/50 {
+  border-color: rgba(0, 102, 255, 0.5) !important;
+}
+
+html.light .border-blue-400\/20,
+html.light .border-blue-400\/30 {
+  border-color: rgba(37, 99, 235, 0.25) !important;
+}
+
+html.light .border-purple-400\/20,
+html.light .border-purple-400\/30 {
+  border-color: rgba(124, 58, 237, 0.25) !important;
+}
+
+/* Hover state overrides */
+html.light .hover\:text-cyan-400:hover,
+html.light .hover\:text-cyan-500:hover {
+  color: #0052cc !important;
+}
+
+html.light .hover\:text-white:hover {
+  color: #0f172a !important;
+}
+
+html.light .hover\:border-cyan-400\/50:hover,
+html.light .hover\:border-cyan-400\/60:hover {
+  border-color: rgba(0, 102, 255, 0.6) !important;
+}
+
+html.light .hover\:bg-cyan-400\/10:hover,
+html.light .hover\:bg-cyan-500\/10:hover {
+  background-color: rgba(0, 102, 255, 0.12) !important;
+}
+
+html.light .hover\:bg-white:hover {
+  background-color: #f8fafc !important;
+}
+
+/* Gradient text visibility in light mode */
+html.light .gradient-name {
+  background: linear-gradient(135deg, #0066ff 0%, #2563eb 50%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 15px rgba(0, 102, 255, 0.5));
+}
+
+/* Ensure gradient text is visible in light mode */
+html.light .text-transparent.bg-clip-text {
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+html.light .bg-gradient-to-r.from-cyan-400,
+html.light .bg-gradient-to-r.from-cyan-400.via-blue-500.to-purple-500 {
+  background: linear-gradient(to right, #0066ff, #2563eb, #7c3aed) !important;
+}
+
+html.light .bg-gradient-to-r.from-blue-500.to-cyan-500 {
+  background: linear-gradient(to right, #2563eb, #0066ff) !important;
+}
+
+html.light .bg-gradient-to-r.from-purple-500.to-pink-500 {
+  background: linear-gradient(to right, #7c3aed, #d946ef) !important;
+}
+
+html.light .bg-gradient-to-r.from-cyan-500.to-blue-500 {
+  background: linear-gradient(to right, #0066ff, #2563eb) !important;
+}
+
+/* Placeholder text */
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #94a3b8 !important;
+  opacity: 0.8;
+}
+
+/* Input fields in light mode */
+html.light input,
+html.light textarea {
+  color: #0f172a !important;
+  background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+html.light input:focus,
+html.light textarea:focus {
+  background-color: #ffffff !important;
+  border-color: rgba(0, 102, 255, 0.5) !important;
+}
+
+/* Card and container backgrounds - maintain glassmorphism style */
+html.light .glass,
+html.light .glass-strong {
+  /* Already defined above with proper glassmorphism */
+}
+
+/* Status indicators in light mode */
+html.light .status-processing {
+  color: #0066ff !important;
+}
+
+html.light .status-processing::after {
+  background: #0066ff !important;
+  box-shadow: 0 0 12px rgba(0, 102, 255, 0.7) !important;
+}
+
+html.light .status-learning {
+  color: #7c3aed !important;
+}
+
+html.light .status-deploying {
+  color: #059669 !important;
+}
+
+/* Icon colors */
+html.light svg {
+  color: inherit;
+}
+
+html.light .text-cyan-400 svg,
+html.light .text-cyan-500 svg {
+  color: #0066ff !important;
+}
+
+/* Link colors */
+html.light a {
+  color: #0066ff;
+}
+
+html.light a:hover {
+  color: #0052cc;
+}
+
+/* Divider lines */
+html.light hr,
+html.light .border-t {
+  border-color: rgba(0, 102, 255, 0.15) !important;
+}
+
+/* Shadow adjustments for light mode */
+html.light .shadow-glow-cyan,
+html.light .shadow-glow-blue,
+html.light .shadow-glow-purple {
+  box-shadow: 0 0 25px rgba(0, 240, 255, 0.4),
+              0 0 50px rgba(0, 240, 255, 0.2),
+              0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Additional light mode component fixes */
+html.light .bg-gradient-to-br.from-cyan-500\/20.to-blue-500\/20,
+html.light .bg-gradient-to-br.from-purple-500\/20.to-pink-500\/20,
+html.light .bg-gradient-to-br.from-cyan-500\/20.to-blue-500\/20 {
+  background: linear-gradient(to bottom right, rgba(0, 102, 255, 0.1), rgba(37, 99, 235, 0.1)) !important;
+}
+
+/* Icon container backgrounds */
+html.light .bg-cyan-400\/20,
+html.light .bg-blue-500\/20,
+html.light .bg-purple-500\/20 {
+  background-color: rgba(0, 102, 255, 0.15) !important;
+}
+
+/* Service box backgrounds */
+html.light .from-blue-500\/20.to-cyan-500\/20,
+html.light .from-purple-500\/20.to-pink-500\/20,
+html.light .from-cyan-500\/20.to-blue-500\/20 {
+  background: linear-gradient(to right, rgba(37, 99, 235, 0.15), rgba(0, 102, 255, 0.15)) !important;
+}
+
+/* Project card backgrounds */
+html.light .from-cyan-500\/20.via-blue-500\/20.to-purple-500\/20,
+html.light .from-purple-500\/20.via-magenta-500\/20.to-pink-500\/20,
+html.light .from-blue-500\/20.via-cyan-500\/20.to-teal-500\/20 {
+  background: linear-gradient(to right, rgba(0, 102, 255, 0.15), rgba(37, 99, 235, 0.15), rgba(124, 58, 237, 0.15)) !important;
+}
+
+/* Floating icon colors */
+html.light .text-cyan-400 svg,
+html.light .text-blue-500 svg,
+html.light .text-purple-500 svg {
+  color: #0066ff !important;
+}
+
+html.light .text-blue-500 svg {
+  color: #2563eb !important;
+}
+
+html.light .text-purple-500 svg {
+  color: #7c3aed !important;
+}
+
+/* Button text in light mode */
+html.light button.text-cyan-400,
+html.light .btn-futuristic {
+  color: #0066ff !important;
+}
+
+/* Chatbot and form elements */
+html.light .glass input,
+html.light .glass textarea {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  color: #0f172a !important;
+}
+
+html.light .glass input:focus,
+html.light .glass textarea:focus {
+  background-color: #ffffff !important;
+  border-color: rgba(0, 102, 255, 0.5) !important;
+}
+
+/* Ensure all interactive elements are visible */
+html.light [role="button"],
+html.light button,
+html.light a {
+  color: inherit;
+}
+
+/* Status badge colors */
+html.light .bg-cyan-400,
+html.light .bg-blue-500,
+html.light .bg-purple-500 {
+  background-color: #0066ff !important;
+}
+
+html.light .text-cyan-400.bg-cyan-400\/10 {
+  background-color: rgba(0, 102, 255, 0.12) !important;
+  color: #0066ff !important;
+}
+
+/* Smooth scroll behavior - Framer Awards style */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+/* Language transition styles */
+.language-transition {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.language-transition-entering {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.language-transition-entered {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.language-transition-exiting {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+/* Section transitions */
+section {
+  position: relative;
+  z-index: 10;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+/* Parallax container */
+.parallax-container {
+  will-change: transform;
+  transform-style: preserve-3d;
+}
+
+/* Scroll reveal animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scroll-reveal {
+  animation: fadeInUp 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+.scroll-reveal.revealed {
+  opacity: 1;
+}
+
+/* Smooth section transitions */
+.section-transition {
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Enhanced glassmorphism for sections */
+.section-glass {
+  background: rgba(15, 15, 15, 0.5);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid rgba(0, 240, 255, 0.15);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3),
+              0 0 60px rgba(0, 240, 255, 0.1);
+}
+
+html.light .section-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  border: 1px solid rgba(0, 102, 255, 0.25);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.12),
+    0 0 60px rgba(0, 102, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .neural-bg {
+    background-size: 30px 30px;
+  }
+  
+  .grid-overlay {
+    background-size: 25px 25px;
+  }
+  
+  html.light .glass,
+  html.light .glass-strong {
+    background: rgba(255, 255, 255, 0.98) !important;
+  }
+
+  /* Reduce 3D complexity on mobile */
+  .section-3d-background {
+    opacity: 0.2 !important;
+  }
+}

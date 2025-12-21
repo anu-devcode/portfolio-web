@@ -1,0 +1,133 @@
+{
+  "nav": {
+    "home": "መነሻ",
+    "about": "ስለኔ",
+    "projects": "ፕሮጀክቶች",
+    "contact": "ያግኙኝ"
+  },
+  "hero": {
+    "greeting": "ሰላም፣ እኔ",
+    "title": "የሶፍትዌር ምህንድስና",
+    "subtitle": "ዘመናዊ፣ ማስፋፊያ የሆኑ የድር መተግበሪያዎችን በዘመናዊ ቴክኖሎጂዎች መገንባት",
+    "cta": "ስራዬን ይመልከቱ",
+    "contact": "ያግኙኝ",
+    "status": "በሂደት ላይ",
+    "slogan": {
+      "code": "ኮድ.",
+      "learn": "ተማር.",
+      "innovate": "ፈጠር.",
+      "grow": "ዕድገት."
+    },
+    "services": {
+      "backend": "ቤክኤንድ ልማት",
+      "ai": "AI እና አውቶሜሽን",
+      "freelance": "ፍሪላንስ ፕሮጀክቶች"
+    },
+    "scroll": "ማጠቃለል"
+  },
+  "about": {
+    "title": "ስለኔ",
+    "description": "ዘመናዊ የድር ልማት ላይ ባለሙያ የሶፍትዌር ምህንድስና ነኝ፣ ማስፋፊያ እና ለተጠቃሚ ምቹ የሆኑ መተግበሪያዎችን እፈጥራለሁ።",
+    "status": "በመማር ላይ",
+    "skills": {
+      "backend": "ቤክኤንድ ልማት",
+      "ai": "AI እና አውቶሜሽን",
+      "freelance": "ፍሪላንስ ፕሮጀክቶች",
+      "cloud": "ክላውድ እና DevOps"
+    },
+    "technologies": {
+      "nodejs": "Node.js",
+      "python": "Python",
+      "postgresql": "PostgreSQL",
+      "mongodb": "MongoDB",
+      "ml": "የማሽን ትምህርት",
+      "neural": "ኒውራል አውታሮች",
+      "automation": "አውቶሜሽን",
+      "aiSystems": "AI ስርዓቶች",
+      "fullstack": "ሙሉ-ስታክ",
+      "api": "API ልማት",
+      "systemDesign": "የስርዓት ዲዛይን",
+      "deployment": "ማሰራጨት",
+      "aws": "AWS",
+      "docker": "Docker",
+      "kubernetes": "Kubernetes",
+      "cicd": "CI/CD"
+    }
+  },
+  "projects": {
+    "title": "ፕሮጀክቶች",
+    "subtitle": "የቅርብ ጊዜ ስራዎቼ ምርጫ",
+    "status": "በማሰራጨት ላይ",
+    "viewProject": "ፕሮጀክት ይመልከቱ",
+    "viewCode": "ኮድ ይመልከቱ",
+    "technologies": "ቴክኖሎጂዎች",
+    "items": {
+      "ecommerce": {
+        "title": "የኢ-ኮሜርስ መድረክ",
+        "description": "ከክፍያ ውህደት እና የአስተዳዳሪ ዳሽቦርድ ጋር ሙሉ-ስታክ የኢ-ኮሜርስ መፍትሄ።"
+      },
+      "task": {
+        "title": "የተግባር አስተዳደር መተግበሪያ",
+        "description": "ከትዕዛዝ ጋር የሚሰራ የተግባር አስተዳደር መተግበሪያ።"
+      },
+      "ai": {
+        "title": "AI ይዘት ጀነሬተር",
+        "description": "ከበርካታ አብነቶች እና ቅርጸቶች ጋር AI-ተነሳሽ የይዘት ማመንጨት መሳሪያ።"
+      }
+    }
+  },
+  "contact": {
+    "title": "ያግኙኝ",
+    "subtitle": "አዲስ እድሎችን እና አስደሳች ፕሮጀክቶችን ለመወያየት ሁልጊዜ ክፍት ነኝ።",
+    "status": "ኦንላይን",
+    "name": "ስም",
+    "email": "ኢሜይል",
+    "message": "መልዕክት",
+    "send": "መልዕክት ላክ",
+    "sending": "በመላክ ላይ...",
+    "success": "መልዕክት በተሳካ ሁኔታ ተልኳል!",
+    "error": "መልዕክት ላክ አልተሳካም። እባክዎ እንደገና ይሞክሩ።",
+    "info": {
+      "email": "ኢሜይል",
+      "phone": "ስልክ",
+      "location": "አድራሻ",
+      "notProvided": "አልተሰጠም"
+    },
+    "placeholders": {
+      "name": "የእርስዎ ስም",
+      "email": "your.email@example.com",
+      "message": "የእርስዎ መልዕክት..."
+    }
+  },
+  "chatbot": {
+    "title": "AI ረዳት",
+    "placeholder": "ማንኛውንም ጥያቄ ይጠይቁ...",
+    "send": "ላክ",
+    "thinking": "በማሰብ ላይ...",
+    "error": "ይቅርታ፣ ስህተት ተጋግሟል። እባክዎ እንደገና ይሞክሩ።",
+    "online": "ኦንላይን",
+    "greeting": "ሰላም! እኔ AI ረዳትዎ ነኝ። ዛሬ እንዴት ልረዳዎ ይችላለሁ?",
+    "rateLimit": "በጣም ብዙ ጥያቄዎች። እባክዎ ትንሽ ይጠብቁ።"
+  },
+  "footer": {
+    "rights": "ሁሉም መብቶች የተጠበቁ ናቸው።",
+    "built": "በ Next.js እና TypeScript ተገንብቷል",
+    "quickLinks": "ፈጣን አገናኞች",
+    "connect": "ይገናኙ",
+    "copyright": "ፖርትፎሊዮ"
+  },
+  "config": {
+    "personalInfo": {
+      "name": "አንዋር ሁሴን",
+      "title": "የሶፍትዌር ምህንድስና",
+      "email": "anwarhussen3683@gmail.com",
+      "location": "አዲስ አበባ, ኢትዮጵያ",
+      "bio": "በቤክኤንድ ስርዓቶች እና AI ላይ ያተኮረ የጀማሪ የሶፍትዌር ምህንድስና፣ እውነተኛ የዓለም ችግሮችን የሚፈቱ ማስፋፊያ መፍትሄዎችን መገንባት።"
+    },
+    "seo": {
+      "title": "አንዋር ሁሴን - የሶፍትዌር ምህንድስና ፖርትፎሊዮ",
+      "description": "የአንዋር ሁሴን ሙያዊ ፖርትፎሊዮ፣ በቤክኤንድ ስርዓቶች፣ AI እና ዘመናዊ የድር ልማት ላይ የተለዩ የሶፍትዌር ምህንድስና።",
+      "keywords": "የሶፍትዌር ምህንድስና, ቤክኤንድ ልማት, AI ልማት, የድር ልማት, ፖርትፎሊዮ, ኢትዮጵያ"
+    }
+  }
+}
