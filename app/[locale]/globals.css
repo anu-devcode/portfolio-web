@@ -6,42 +6,45 @@
   --font-inter: 'Inter', system-ui, sans-serif;
   --font-space-grotesk: 'Space Grotesk', system-ui, sans-serif;
   
-  /* Dark mode colors - Futuristic */
-  --charcoal-900: #000000;
-  --charcoal-800: #050505;
-  --charcoal-700: #0f0f0f;
-  --charcoal-600: #1a1a1a;
+  /* Space-tech theme colors matching the image */
+  --space-900: #0a0a0f;
+  --space-800: #0f0f1a;
+  --space-700: #141425;
+  --space-600: #1a1a30;
   
-  --cyan-400: #00f0ff;
-  --cyan-500: #00d9ff;
-  --neon-blue: #0066ff;
-  --neon-purple: #8b5cf6;
-  --neon-magenta: #ec4899;
+  --cyber-cyan: #00f0ff;
+  --cyber-blue: #0099ff;
+  --cyber-purple: #8b5cf6;
+  --cyber-magenta: #d946ef;
+  --cyber-orange: #ff6b35;
+  --cyber-green: #10b981;
   
-  --accent-orange: #ff6b35;
-  --accent-green: #10b981;
+  /* Glass morphism colors */
+  --glass-light: rgba(255, 255, 255, 0.1);
+  --glass-medium: rgba(255, 255, 255, 0.15);
+  --glass-dark: rgba(0, 0, 0, 0.2);
   
-  /* Light mode colors - Professional */
-  --light-bg-primary: #ffffff;
-  --light-bg-secondary: #f8fafc;
-  --light-bg-tertiary: #f1f5f9;
-  --light-text-primary: #0f172a;
-  --light-text-secondary: #334155;
-  --light-text-tertiary: #64748b;
-  --light-accent-blue: #0066ff;
-  --light-accent-blue-dark: #0052cc;
-  --light-border: #e2e8f0;
-  /* Semantic design tokens (defaults = dark mode tokens) */
-  --bg-primary: linear-gradient(135deg, #000000 0%, #050505 50%, #0f0f0f 100%);
-  --surface: rgba(15,15,15,0.6);
+  /* Semantic design tokens - Space theme */
+  --bg-primary: linear-gradient(135deg, #0a0a0f 0%, #0f0f1a 50%, #141425 100%);
+  --surface: rgba(26,26,48,0.6);
   --text-primary: #e6f7fb;
-  --text-muted: #9ca3af;
-  --accent: #00d9ff;
-  --accent-strong: #0066ff;
+  --text-muted: #374151;
+  --accent: #00f0ff;
+  --accent-strong: #0099ff;
+  --border: rgba(255,255,255,0.1);
   --radius-lg: 16px;
   --radius-md: 8px;
   --shadow-soft: 0 6px 18px rgba(0,0,0,0.45);
   --glow-intensity: 0.25; /* reduce overall neon intensity */
+  
+  /* Light mode variables - Same color identity as dark mode */
+  --light-bg-primary: #ffffff;
+  --light-surface: rgba(255,255,255,0.98);
+  --light-text-primary: #0f172a;
+  --light-text-secondary: #374151;
+  --light-accent: #00f0ff;
+  --light-accent-strong: #0099ff;
+  --light-border: rgba(0,240,255,0.15);
 }
 
 * {
@@ -97,24 +100,35 @@ body {
   transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* Light theme - Intentionally designed, not inverted */
+/* Light theme - Use light backgrounds for cards but dark text */
 html.light body {
   --bg-primary: linear-gradient(135deg, #ffffff 0%, #f8fafc 25%, #f1f5f9 50%, #e2e8f0 75%, #cbd5e1 100%);
   --surface: rgba(255,255,255,0.98);
-  --text-primary: var(--light-text-primary);
-  --text-muted: var(--light-text-secondary);
-  --accent: var(--light-accent-blue);
-  --accent-strong: var(--light-accent-blue-dark);
+  --text-primary: #0f172a;
+  --text-muted: #374151;
+  --accent: #00f0ff;
+  --accent-strong: #0099ff;
+  --border: rgba(0,240,255,0.15);
   color: var(--text-primary);
   position: relative;
   background-image: 
-    radial-gradient(circle at 20% 50%, rgba(0, 102, 255, 0.02) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(0, 102, 255, 0.015) 0%, transparent 50%),
-    radial-gradient(circle at 40% 20%, rgba(124, 58, 237, 0.01) 0%, transparent 50%);
+    radial-gradient(circle at 20% 50%, rgba(0, 240, 255, 0.02) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(0, 240, 255, 0.015) 0%, transparent 50%),
+    radial-gradient(circle at 40% 20%, rgba(0, 153, 255, 0.01) 0%, transparent 50%);
 }
 
 html.light section {
   background: transparent;
+}
+
+/* Footer light mode background */
+html.light footer {
+  background: linear-gradient(to bottom, transparent, rgba(248, 250, 252, 0.98)) !important;
+  border-top-color: rgba(15, 23, 42, 0.15) !important;
+}
+
+html.light footer .bg-\[rgba\(0\,0\,0\,0\.2\)\] {
+  background-color: rgba(241, 245, 249, 0.8) !important;
 }
 
 /* Custom scrollbar */
@@ -140,11 +154,11 @@ html.light ::-webkit-scrollbar-track {
 }
 
 html.light ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #0066ff, #7c3aed);
+  background: linear-gradient(180deg, #00f0ff, #0099ff);
 }
 
 html.light ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #0052cc, #7c3aed);
+  background: linear-gradient(180deg, #00d9ff, #0099ff);
 }
 
 /* Glassmorphism - Intentionally designed for each mode */
@@ -183,11 +197,11 @@ html.light ::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(0, 102, 255, 0.15);
+    border: 1px solid rgba(0, 240, 255, 0.15);
     box-shadow: 
       0 4px 6px -1px rgba(0, 0, 0, 0.08),
       0 2px 4px -1px rgba(0, 0, 0, 0.04),
-      0 0 0 1px rgba(0, 102, 255, 0.08);
+      0 0 0 1px rgba(0, 240, 255, 0.08);
   }
   
   .glass-strong {
@@ -201,11 +215,11 @@ html.light ::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(30px) saturate(180%);
     -webkit-backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid rgba(0, 102, 255, 0.2);
+    border: 1px solid rgba(0, 240, 255, 0.2);
     box-shadow: 
       0 10px 15px -3px rgba(0, 0, 0, 0.08),
       0 4px 6px -2px rgba(0, 0, 0, 0.04),
-      0 0 0 1px rgba(0, 102, 255, 0.12);
+      0 0 0 1px rgba(0, 240, 255, 0.12);
   }
   
   /* Glow effects - Minimal in light mode */
@@ -215,8 +229,8 @@ html.light ::-webkit-scrollbar-thumb:hover {
   }
   
   html.light .glow-cyan {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08),
-                0 2px 4px -1px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 0 10px rgba(0, 216, 255, calc(var(--glow-intensity) * 0.9)),
+                0 0 18px rgba(0, 216, 255, calc(var(--glow-intensity) * 0.6));
   }
   
   .glow-blue {
@@ -259,12 +273,12 @@ html.light ::-webkit-scrollbar-thumb:hover {
     text-shadow: none;
   }
   
-  /* Neon cyan-blue glowing text style - used ONLY for hero name */
+  /* Neon cyan-blue glowing text style - used for hero names and headings */
   .text-neon-cyan {
     color: var(--accent);
     text-shadow:
-      0 0 6px rgba(0, 216, 255, calc(var(--glow-intensity) * 0.9)),
-      0 0 12px rgba(0, 216, 255, calc(var(--glow-intensity) * 0.5));
+      0 0 6px rgba(0, 240, 255, calc(var(--glow-intensity) * 0.9)),
+      0 0 12px rgba(0, 240, 255, calc(var(--glow-intensity) * 0.5));
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-weight: 700;
@@ -272,11 +286,14 @@ html.light ::-webkit-scrollbar-thumb:hover {
   }
   
   html.light .text-neon-cyan {
-    color: #0052cc;
+    color: var(--accent);
     text-shadow:
-      0 0 6px rgba(0, 102, 255, 0.45),
-      0 0 14px rgba(0, 102, 255, 0.32),
-      0 0 22px rgba(0, 102, 255, 0.22);
+      0 0 6px rgba(0, 240, 255, calc(var(--glow-intensity) * 0.9)),
+      0 0 12px rgba(0, 240, 255, calc(var(--glow-intensity) * 0.5));
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 700;
+    letter-spacing: 0.02em;
   }
   
   /* Crisp text - No glow, high contrast */
@@ -313,9 +330,9 @@ html.light ::-webkit-scrollbar-thumb:hover {
   html.light .heading-luminous::before {
     background: radial-gradient(
       ellipse at center,
-      rgba(0, 102, 255, 0.03) 0%,
-      rgba(37, 99, 235, 0.015) 30%,
-      rgba(124, 58, 237, 0.01) 60%,
+      rgba(0, 240, 255, 0.03) 0%,
+      rgba(0, 153, 255, 0.015) 30%,
+      rgba(139, 92, 246, 0.01) 60%,
       transparent 80%
     );
     opacity: 0.6;
@@ -339,7 +356,7 @@ html.light ::-webkit-scrollbar-thumb:hover {
   html.light .heading-luminous::after {
     background: radial-gradient(
       circle at 50% 50%,
-      rgba(0, 102, 255, 0.015) 0%,
+      rgba(0, 240, 255, 0.015) 0%,
       transparent 50%
     );
   }
@@ -357,15 +374,15 @@ html.light ::-webkit-scrollbar-thumb:hover {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    filter: drop-shadow(0 0 10px rgba(0, 216, 255, calc(var(--glow-intensity) * 0.6)));
+    filter: drop-shadow(0 0 10px rgba(0, 240, 255, calc(var(--glow-intensity) * 0.6)));
   }
   
   html.light .gradient-name {
-    background: linear-gradient(135deg, #0066ff 0%, #2563eb 50%, #7c3aed 100%);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 50%, #8b5cf6 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    filter: none;
+    filter: drop-shadow(0 0 10px rgba(0, 240, 255, calc(var(--glow-intensity) * 0.6)));
   }
   
   .gradient-slogan {
@@ -384,7 +401,7 @@ html.light ::-webkit-scrollbar-thumb:hover {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     text-shadow:
-      0 0 4px rgba(37, 99, 235, 0.25),
+      0 0 4px rgba(0, 102, 204, 0.25),
       0 0 10px rgba(15, 23, 42, 0.18);
   }
   
@@ -417,8 +434,8 @@ html.light ::-webkit-scrollbar-thumb:hover {
   }
   
   html.light .border-glow {
-    border: 1px solid rgba(0, 102, 255, 0.2);
-    box-shadow: 0 0 0 1px rgba(0, 102, 255, 0.1);
+    border: 1px solid rgba(0, 240, 255, 0.2);
+    box-shadow: 0 0 0 1px rgba(0, 240, 255, 0.1);
   }
   
   .border-glow-hover:hover {
@@ -427,8 +444,8 @@ html.light ::-webkit-scrollbar-thumb:hover {
   }
   
   html.light .border-glow-hover:hover {
-    border-color: rgba(0, 102, 255, 0.4);
-    box-shadow: 0 0 0 1px rgba(0, 102, 255, 0.2);
+    border-color: rgba(0, 240, 255, 0.4);
+    box-shadow: 0 0 0 1px rgba(0, 240, 255, 0.2);
   }
   
   .neural-line {
@@ -446,7 +463,7 @@ html.light ::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(0, 102, 255, 0.15),
+      rgba(0, 240, 255, 0.15),
       transparent
     );
     height: 1px;
@@ -468,8 +485,8 @@ html.light ::-webkit-scrollbar-thumb:hover {
   }
   
   html.light .neural-node {
-    background: rgba(0, 102, 255, 0.4);
-    box-shadow: 0 0 6px rgba(0, 102, 255, 0.4);
+    background: rgba(0, 240, 255, 0.4);
+    box-shadow: 0 0 6px rgba(0, 240, 255, 0.4);
   }
   
   .text-balance {
@@ -536,7 +553,8 @@ html.light ::-webkit-scrollbar-thumb:hover {
   }
 
   .type-muted {
-    color: #9ca3af;
+    color: #d1d5db;
+    opacity: 1;
   }
 
   /* Light-mode typography defaults (high contrast + gentle depth) */
@@ -547,7 +565,8 @@ html.light ::-webkit-scrollbar-thumb:hover {
   }
   
   html.light .type-muted {
-    color: var(--light-text-secondary);
+    color: #374151;
+    opacity: 1;
   }
   
   html.light .type-caption {
@@ -563,13 +582,46 @@ html.light ::-webkit-scrollbar-thumb:hover {
 
   /* Dark mode text overrides for higher readability */
   html:not(.light) .text-gray-300 {
-    color: #e5e7eb !important;
+    color: #f3f4f6 !important;
+    opacity: 1 !important;
   }
 
   html:not(.light) .text-gray-400,
   html:not(.light) .text-gray-500 {
-    color: #d4d4d8 !important;
+    color: #e5e7eb !important;
+    opacity: 1 !important;
   }
+
+  html:not(.light) .text-muted {
+    color: #d1d5db !important;
+    opacity: 1 !important;
+  }
+
+/* Light mode - Full opacity for all text elements */
+html.light * {
+  opacity: 1 !important;
+}
+
+html.light .text-muted {
+  color: #475569 !important;
+  opacity: 1 !important;
+}
+
+html.light .type-muted {
+  color: #475569 !important;
+  opacity: 1 !important;
+}
+
+html.light .type-body,
+html.light .type-body-strong {
+  color: var(--light-text-primary);
+  opacity: 1 !important;
+}
+
+html.light .type-caption {
+  color: var(--light-text-secondary);
+  opacity: 1 !important;
+}
 }
 
 /* Focus styles */
@@ -579,7 +631,7 @@ html.light ::-webkit-scrollbar-thumb:hover {
 }
 
 html.light *:focus-visible {
-  outline: 2px solid rgba(0, 102, 255, 0.6);
+  outline: 2px solid rgba(0, 240, 255, 0.6);
   outline-offset: 2px;
 }
 
@@ -590,7 +642,7 @@ html.light *:focus-visible {
 }
 
 html.light ::selection {
-  background: rgba(0, 102, 255, 0.2);
+  background: rgba(0, 240, 255, 0.2);
   color: #0f172a;
 }
 
@@ -612,8 +664,8 @@ html.light ::selection {
 html.light .neural-bg {
   opacity: 0.06;
   background-image: 
-    linear-gradient(rgba(0, 102, 255, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 102, 255, 0.1) 1px, transparent 1px);
+    linear-gradient(rgba(0, 240, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.1) 1px, transparent 1px);
   background-size: 50px 50px;
 }
 
@@ -636,7 +688,7 @@ html.light .neural-bg {
 html.light .grid-overlay {
   opacity: 0.08;
   background-image: 
-    radial-gradient(circle at 2px 2px, rgba(0, 102, 255, 0.1) 1px, transparent 0);
+    radial-gradient(circle at 2px 2px, rgba(0, 240, 255, 0.1) 1px, transparent 0);
   background-size: 40px 40px;
 }
 
@@ -661,8 +713,8 @@ html.light .vignette {
   background: radial-gradient(
     ellipse at center,
     transparent 0%,
-    rgba(0, 102, 255, 0.03) 70%,
-    rgba(0, 102, 255, 0.08) 100%
+    rgba(0, 240, 255, 0.03) 70%,
+    rgba(0, 240, 255, 0.08) 100%
   );
 }
 
@@ -693,7 +745,7 @@ html.light .vignette {
   }
   
   html.light .cursor-glow::before {
-    background: radial-gradient(circle, rgba(0, 102, 255, 0.1), transparent);
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.1), transparent);
   }
 }
 
@@ -706,11 +758,11 @@ section {
 /* Status indicators */
 .status-processing {
   position: relative;
-  color: var(--cyan-400);
+  color: var(--cyber-cyan);
 }
 
 html.light .status-processing {
-  color: var(--light-accent-blue);
+  color: var(--light-accent);
 }
 
 .status-processing::after {
@@ -728,8 +780,8 @@ html.light .status-processing {
 }
 
 html.light .status-processing::after {
-  background: var(--light-accent-blue);
-  box-shadow: 0 0 6px rgba(0, 102, 255, 0.5);
+  background: var(--light-accent);
+  box-shadow: 0 0 6px rgba(0, 240, 255, 0.5);
 }
 
 .status-learning {
@@ -807,13 +859,13 @@ h3 {
 }
 
 html.light .btn-futuristic {
-  border: 1px solid rgba(37,99,235,0.12);
-  color: var(--accent-strong);
-  background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.98));
+  border: 1px solid rgba(0,102,204,0.2);
+  color: #0066cc;
+  background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.98));
 }
 
 html.light .btn-futuristic::before {
-  background: linear-gradient(90deg, transparent, rgba(0, 102, 255, 0.15), transparent);
+  background: linear-gradient(90deg, transparent, rgba(0, 102, 204, 0.15), transparent);
 }
 
 .btn-futuristic:hover::before {
@@ -827,36 +879,51 @@ html.light .btn-futuristic::before {
 }
 
 html.light .btn-futuristic:hover {
-  border-color: rgba(0, 102, 255, 0.5);
+  border-color: rgba(0, 102, 204, 0.4);
   box-shadow: 
-    0 4px 12px rgba(0, 102, 255, 0.2),
-    inset 0 0 0 1px rgba(0, 102, 255, 0.1);
+    0 4px 12px rgba(0, 102, 204, 0.2),
+    inset 0 0 0 1px rgba(0, 102, 204, 0.1);
   transform: translateY(-2px);
 }
 
 /* Light mode text color overrides - Intentionally designed */
 html.light {
   --text-primary: #0f172a;
-  --text-secondary: #334155;
-  --text-tertiary: #64748b;
+  --text-secondary: #1e293b;
+  --text-tertiary: #334155;
   --bg-primary: #ffffff;
   --bg-secondary: #f8fafc;
   --bg-tertiary: #f1f5f9;
 }
 
+/* Dark mode text colors - high contrast */
+html:not(.light) .text-white {
+  color: #f8fafc !important;
+  opacity: 1 !important;
+}
+
 /* Text colors - Light mode specific overrides */
 html.light .text-white {
   color: #0f172a !important;
+  opacity: 1 !important;
+}
+
+/* Ensure high contrast for all text elements in light mode */
+html.light .text-text {
+  color: #0f172a !important;
+}
+
+html.light .text-muted {
+  color: #374151 !important;
+  opacity: 1 !important;
 }
 
 /* Heading text in light mode - High contrast, crisp */
 html.light h1.text-white,
 html.light h2.text-white,
 html.light h3.text-white {
-  color: #0f172a !important;
-  text-shadow: 0 0 6px rgba(0, 102, 255, 0.45),
-      0 0 14px rgba(0, 102, 255, 0.32),
-      0 0 22px rgba(0, 102, 255, 0.22);
+  color: #1a1a1a !important;
+  text-shadow: none;
   font-weight: 800;
   letter-spacing: -0.03em;
 }
@@ -894,17 +961,17 @@ html.light .text-gray-600 {
 
 html.light .text-cyan-400,
 html.light .text-cyan-500 {
-  color: #0066ff !important;
+  color: #0066cc !important;
 }
 
 html.light .text-blue-400,
 html.light .text-blue-500 {
-  color: #2563eb !important;
+  color: #0052a3 !important;
 }
 
 html.light .text-purple-400,
 html.light .text-purple-500 {
-  color: #7c3aed !important;
+  color: #8b5cf6 !important;
 }
 
 /* Background color overrides - Light mode */
@@ -920,44 +987,44 @@ html.light .bg-charcoal-900 {
 
 html.light .bg-cyan-400\/10,
 html.light .bg-cyan-500\/10 {
-  background-color: rgba(0, 102, 255, 0.08) !important;
+  background-color: rgba(0, 102, 204, 0.08) !important;
 }
 
 html.light .bg-blue-400\/10,
 html.light .bg-blue-500\/10 {
-  background-color: rgba(37, 99, 235, 0.06) !important;
+  background-color: rgba(0, 82, 163, 0.06) !important;
 }
 
 html.light .bg-purple-400\/10,
 html.light .bg-purple-500\/10 {
-  background-color: rgba(124, 58, 237, 0.06) !important;
+  background-color: rgba(139, 92, 246, 0.06) !important;
 }
 
 /* Border color overrides - Light mode */
 html.light .border-cyan-400\/10,
 html.light .border-cyan-400\/20,
 html.light .border-cyan-400\/30 {
-  border-color: rgba(0, 102, 255, 0.2) !important;
+  border-color: rgba(0, 102, 204, 0.2) !important;
 }
 
 html.light .border-cyan-400\/50 {
-  border-color: rgba(0, 102, 255, 0.4) !important;
+  border-color: rgba(0, 102, 204, 0.4) !important;
 }
 
 html.light .border-blue-400\/20,
 html.light .border-blue-400\/30 {
-  border-color: rgba(37, 99, 235, 0.2) !important;
+  border-color: rgba(0, 82, 163, 0.2) !important;
 }
 
 html.light .border-purple-400\/20,
 html.light .border-purple-400\/30 {
-  border-color: rgba(124, 58, 237, 0.2) !important;
+  border-color: rgba(139, 92, 246, 0.2) !important;
 }
 
 /* Hover state overrides - Light mode */
 html.light .hover\:text-cyan-400:hover,
 html.light .hover\:text-cyan-500:hover {
-  color: #0052cc !important;
+  color: #0052a3 !important;
 }
 
 html.light .hover\:text-white:hover {
@@ -966,12 +1033,12 @@ html.light .hover\:text-white:hover {
 
 html.light .hover\:border-cyan-400\/50:hover,
 html.light .hover\:border-cyan-400\/60:hover {
-  border-color: rgba(0, 102, 255, 0.5) !important;
+  border-color: rgba(0, 102, 204, 0.5) !important;
 }
 
 html.light .hover\:bg-cyan-400\/10:hover,
 html.light .hover\:bg-cyan-500\/10:hover {
-  background-color: rgba(0, 102, 255, 0.1) !important;
+  background-color: rgba(0, 102, 204, 0.1) !important;
 }
 
 html.light .hover\:bg-white:hover {
@@ -980,7 +1047,7 @@ html.light .hover\:bg-white:hover {
 
 /* Gradient text - Light mode optimized */
 html.light .gradient-name {
-  background: linear-gradient(135deg, #0066ff 0%, #2563eb 50%, #7c3aed 100%);
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 50%, #7c3aed 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -994,11 +1061,11 @@ html.light .text-transparent.bg-clip-text {
 
 html.light .bg-gradient-to-r.from-cyan-400,
 html.light .bg-gradient-to-r.from-cyan-400.via-blue-500.to-purple-500 {
-  background: linear-gradient(to right, #0066ff, #2563eb, #7c3aed) !important;
+  background: linear-gradient(to right, #0066cc, #0052a3, #7c3aed) !important;
 }
 
 html.light .bg-gradient-to-r.from-blue-500.to-cyan-500 {
-  background: linear-gradient(to right, #2563eb, #0066ff) !important;
+  background: linear-gradient(to right, #0052a3, #0066cc) !important;
 }
 
 html.light .bg-gradient-to-r.from-purple-500.to-pink-500 {
@@ -1006,7 +1073,7 @@ html.light .bg-gradient-to-r.from-purple-500.to-pink-500 {
 }
 
 html.light .bg-gradient-to-r.from-cyan-500.to-blue-500 {
-  background: linear-gradient(to right, #0066ff, #2563eb) !important;
+  background: linear-gradient(to right, #0066cc, #0052a3) !important;
 }
 
 /* Placeholder text - Light mode */
@@ -1022,19 +1089,81 @@ html.light input[type="email"],
 html.light textarea {
   background-color: rgba(255, 255, 255, 0.9) !important;
   color: #0f172a !important;
-  border-color: rgba(0, 102, 255, 0.15) !important;
+  border-color: rgba(15, 23, 42, 0.2) !important;
+  transition: all 0.2s ease;
+}
+
+html.light input[type="text"]:hover,
+html.light input[type="email"]:hover,
+html.light textarea:hover {
+  border-color: rgba(0, 240, 255, 0.3) !important;
+  background-color: rgba(255, 255, 255, 1) !important;
 }
 
 html.light input[type="text"]:focus,
 html.light input[type="email"]:focus,
 html.light textarea:focus {
-  border-color: rgba(0, 102, 255, 0.4) !important;
-  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1) !important;
+  border-color: #00f0ff !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.15) !important;
+  outline: none !important;
+}
+
+html.light input[type="text"].error,
+html.light input[type="email"].error,
+html.light textarea.error {
+  border-color: #dc2626 !important;
+  background-color: rgba(254, 226, 226, 0.5) !important;
+}
+
+html.light input[type="text"].error:focus,
+html.light input[type="email"].error:focus,
+html.light textarea.error:focus {
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15) !important;
+}
+
+/* Dark mode input fields */
+input[type="text"],
+input[type="email"],
+textarea {
+  background-color: rgba(26, 26, 48, 0.6) !important;
+  color: #e6f7fb !important;
+  border: 1px solid rgba(0, 240, 255, 0.2) !important;
+  transition: all 0.2s ease;
+}
+
+input[type="text"]:hover,
+input[type="email"]:hover,
+textarea:hover {
+  border-color: rgba(0, 240, 255, 0.35) !important;
+  background-color: rgba(26, 26, 48, 0.8) !important;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+  border-color: #00f0ff !important;
+  background-color: rgba(26, 26, 48, 0.9) !important;
+  box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.15) !important;
+  outline: none !important;
+}
+
+input[type="text"].error,
+input[type="email"].error,
+textarea.error {
+  border-color: #ef4444 !important;
+  background-color: rgba(127, 29, 29, 0.3) !important;
+}
+
+input[type="text"].error:focus,
+input[type="email"].error:focus,
+textarea.error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
 }
 
 /* Project card overlays - Light mode */
 html.light .bg-charcoal-900\/40 {
-  background-color: rgba(0, 102, 255, 0.05) !important;
+  background-color: rgba(0, 240, 255, 0.05) !important;
 }
 
 /* 3D Background opacity - Light mode (more subtle) */
@@ -1043,7 +1172,7 @@ html.light .absolute.inset-0.bg-gradient-to-br {
 }
 
 html.light canvas {
-  opacity: 0.6 !important;
+  opacity: 0.15 !important;
 }
 
 /* 3D Architectural elements - Light mode adjustments */
@@ -1053,20 +1182,59 @@ html.light .absolute.inset-0.bg-\[radial-gradient {
 
 /* Light mode 3D background gradients - more subtle */
 html.light .absolute.inset-0.bg-gradient-to-br.from-cyan-500\/3 {
-  background: linear-gradient(to bottom right, rgba(0, 102, 255, 0.015), rgba(37, 99, 235, 0.01), rgba(124, 58, 237, 0.015)) !important;
+  background: linear-gradient(to bottom right, rgba(0, 240, 255, 0.015), rgba(0, 153, 255, 0.01), rgba(139, 92, 246, 0.015)) !important;
 }
 
-html.light .absolute.inset-0.bg-\[radial-gradient\(circle_at_30%_50% {
-  background: radial-gradient(circle at 30% 50%, rgba(0, 102, 255, 0.02), transparent 70%) !important;
+html.light .absolute.inset-0.bg-\[radial-gradient\(circle_at_30\%_50\%\)\] {
+  background: radial-gradient(
+    circle at 30% 50%,
+    rgba(0, 240, 255, 0.02),
+    transparent 70%
+  ) !important;
 }
 
-html.light .absolute.inset-0.bg-\[radial-gradient\(circle_at_50%_50% {
-  background: radial-gradient(circle at 50% 50%, rgba(0, 102, 255, 0.015), transparent 80%) !important;
+html.light .absolute.inset-0.bg-\[radial-gradient\(circle_at_50\%_50\%\)\] {
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(0, 240, 255, 0.015),
+    transparent 80%
+  ) !important;
 }
 
 /* Shadow utilities - Light mode */
 html.light .shadow-glow-cyan {
-  box-shadow: 0 0 8px rgba(0, 102, 255, 0.2) !important;
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.2) !important;
+}
+
+/* Consistent cyan text for all pages */
+.text-cyan-glow {
+  color: var(--accent) !important;
+}
+
+html:not(.light) .text-cyan-glow {
+  text-shadow: 0 0 4px rgba(0, 240, 255, 0.3);
+}
+
+html.light .text-cyan-glow {
+  color: #0066cc !important;
+  text-shadow: none;
+}
+
+/* Hero name styling for all pages */
+.hero-name {
+  color: var(--accent) !important;
+}
+
+html:not(.light) .hero-name {
+  text-shadow:
+    0 0 6px rgba(0, 240, 255, 0.4),
+    0 0 12px rgba(0, 240, 255, 0.2);
+}
+
+html.light .hero-name {
+  color: #0066cc !important;
+  text-shadow: none;
+  font-weight: 800;
 }
 
 @keyframes pulse {

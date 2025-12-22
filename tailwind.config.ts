@@ -10,32 +10,37 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Futuristic color palette
+        // Space-tech inspired palette matching the image
         bg: 'var(--bg-primary)',
         surface: 'var(--surface)',
         text: 'var(--text-primary)',
         muted: 'var(--text-muted)',
         accent: 'var(--accent)',
         'accent-strong': 'var(--accent-strong)',
-        charcoal: {
-          50: '#1a1a1a',
-          100: '#0f0f0f',
-          200: '#050505',
-          900: '#000000',
+        
+        // Deep space background
+        space: {
+          900: '#0a0a0f',
+          800: '#0f0f1a',
+          700: '#141425',
+          600: '#1a1a30',
         },
-        cyan: {
-          400: '#00f0ff',
-          500: '#00d9ff',
-          600: '#00b8d4',
-        },
-        neon: {
-          blue: '#0066ff',
+        
+        // Vibrant tech colors from the image
+        cyber: {
+          cyan: '#00f0ff',
+          blue: '#0099ff', 
           purple: '#8b5cf6',
-          magenta: '#ec4899',
-        },
-        accent: {
+          magenta: '#d946ef',
           orange: '#ff6b35',
           green: '#10b981',
+        },
+        
+        // Glass morphism
+        glass: {
+          light: 'rgba(255, 255, 255, 0.1)',
+          medium: 'rgba(255, 255, 255, 0.15)',
+          dark: 'rgba(0, 0, 0, 0.2)',
         },
       },
       fontFamily: {
@@ -45,18 +50,25 @@ const config: Config = {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-        'neural-grid': 'linear-gradient(rgba(0, 240, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 240, 255, 0.1) 1px, transparent 1px)',
+        'space-grid': 'linear-gradient(rgba(0, 240, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 240, 255, 0.1) 1px, transparent 1px)',
+        'neural-network': 'radial-gradient(circle at 20% 50%, rgba(0, 240, 255, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 50%, rgba(139, 92, 246, 0.1) 0%, transparent 50%)',
+        'tech-gradient': 'linear-gradient(135deg, rgba(0, 240, 255, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)',
+        'glass-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
       },
       backdropBlur: {
         xs: '2px',
       },
       boxShadow: {
         'glow-cyan': '0 0 20px rgba(0, 240, 255, 0.5)',
-        'glow-blue': '0 0 20px rgba(0, 102, 255, 0.5)',
+        'glow-blue': '0 0 20px rgba(0, 153, 255, 0.5)',
         'glow-purple': '0 0 20px rgba(139, 92, 246, 0.5)',
-        'glow-magenta': '0 0 20px rgba(236, 72, 153, 0.5)',
+        'glow-magenta': '0 0 20px rgba(217, 70, 239, 0.5)',
+        'glow-orange': '0 0 20px rgba(255, 107, 53, 0.5)',
         'glow-soft': '0 0 40px rgba(0, 240, 255, 0.1)',
         'inner-glow': 'inset 0 0 20px rgba(0, 240, 255, 0.2)',
+        'glass': '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+        'tech-card': '0 4px 20px rgba(0, 240, 255, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.05)',
+        'floating': '0 10px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 240, 255, 0.2)',
       },
       animation: {
         'fade-in': 'fadeIn 0.6s ease-out',

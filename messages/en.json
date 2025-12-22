@@ -4,7 +4,8 @@
     "about": "About",
     "services": "Services",
     "projects": "Projects",
-    "contact": "Contact"
+    "contact": "Contact",
+    "hire": "Hire"
   },
   "hero": {
     "greeting": "Hello, I'm",
@@ -29,8 +30,50 @@
   },
   "about": {
     "title": "About Me",
-    "description": "I'm a passionate software engineer with expertise in modern web development, creating scalable and user-friendly applications.",
+    "subtitle": "Passionate software engineer dedicated to creating innovative solutions that make a difference in the digital world.",
     "status": "Learning",
+    "stats": {
+      "projects": "Projects",
+      "clients": "Clients",
+      "experience": "Years Exp",
+      "technologies": "Technologies"
+    },
+    "bio": {
+      "title": "My Story",
+      "paragraph1": "I'm a junior software engineer with a passion for backend development and artificial intelligence. Based in Addis Ababa, Ethiopia, I specialize in building scalable, efficient systems that solve real-world problems.",
+      "paragraph2": "My journey in software development began with a curiosity about how technology can transform businesses and improve lives. I focus on creating robust backend systems, integrating AI solutions, and delivering high-quality code that stands the test of time.",
+      "paragraph3": "When I'm not coding, I'm exploring new technologies, contributing to open-source projects, or mentoring fellow developers. I believe in continuous learning and staying at the forefront of technological innovation."
+    },
+    "journey": {
+      "title": "My Journey",
+      "current": {
+        "title": "Software Engineer",
+        "description": "Building scalable backend systems and AI-powered solutions for clients worldwide."
+      },
+      "started": {
+        "title": "Started Freelancing",
+        "description": "Began working on client projects, focusing on backend development and system architecture."
+      },
+      "education": {
+        "title": "Information Systems Student",
+        "description": "Started my journey in computer science and information systems, building foundational knowledge."
+      }
+    },
+    "expertise": {
+      "title": "Areas of Expertise",
+      "backend": {
+        "title": "Backend Development",
+        "description": "Building robust, scalable server-side applications with modern frameworks and databases."
+      },
+      "ai": {
+        "title": "AI & Machine Learning",
+        "description": "Integrating intelligent solutions and automation to enhance application capabilities."
+      },
+      "cloud": {
+        "title": "Cloud & DevOps",
+        "description": "Deploying and managing applications with modern cloud infrastructure and CI/CD pipelines."
+      }
+    },
     "skills": {
       "backend": "Backend Development",
       "ai": "AI & Automation",
@@ -116,6 +159,12 @@
     "built": "Built with Next.js and TypeScript",
     "quickLinks": "Quick Links",
     "connect": "Connect",
+    "contact": "Contact",
+    "getInTouch": "Get In Touch",
+    "ctaText": "Have a project in mind? Let's work together to create something amazing.",
+    "startProject": "Start a Project",
+    "madeWith": "Made with",
+    "by": "by",
     "copyright": "Portfolio"
   },
   "services": {
@@ -125,6 +174,20 @@
     "servicesTitle": "Services",
     "skillsTitle": "Technical Skills",
     "learnMore": "Learn More",
+    "technologies": {
+      "nodejs": "Node.js",
+      "python": "Python",
+      "postgresql": "PostgreSQL",
+      "mongodb": "MongoDB",
+      "ml": "Machine Learning",
+      "neural": "Neural Networks",
+      "automation": "Automation",
+      "aiSystems": "AI Systems",
+      "aws": "AWS",
+      "docker": "Docker",
+      "kubernetes": "Kubernetes",
+      "cicd": "CI/CD"
+    },
     "items": {
       "backend": {
         "title": "Backend Development",

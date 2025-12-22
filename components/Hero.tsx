@@ -6,11 +6,18 @@ import { ArrowRight, Code, Brain, Rocket } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { useLocalizedConfig } from '@/hooks/useLocalizedConfig';
 import Hero3DScene from '@/components/3D/Hero3DScene';
+import TypingText from '@/components/TypingText';
 
 export default function Hero() {
   const t = useTranslations('hero');
   const config = useLocalizedConfig();
-  const name = config.personalInfo.name.toUpperCase();
+
+  const roles = [
+    'Junior Software Engineer',
+    'Backend Developer',
+    'Information System Student',
+    'AI and Prompt Engineer',
+  ];
 
   const services = [
     {
@@ -39,147 +46,127 @@ export default function Hero() {
       <Hero3DScene />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32 relative z-10">
-        <div className="text-center">
-          {/* Status Badge */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
+          {/* Profile Image Column - Mobile First */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-            className="mb-8"
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+            className="flex justify-center lg:justify-end order-first lg:order-last"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 glass rounded-full border border-cyan-400/20">
+            <div className="relative">
+              {/* Profile Image Container */}
+              <div className="w-40 h-40 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-3xl glass-strong border border-cyan-400/20 overflow-hidden relative group">
+                {/* Gradient Background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-accent-strong/5" />
+                
+                {/* Professional Avatar */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="relative">
+                    {/* Main Avatar Circle */}
+                    <div className="w-20 h-20 sm:w-32 sm:h-32 rounded-full bg-gradient-to-br from-accent to-accent-strong flex items-center justify-center shadow-2xl border-4 border-white/10">
+                      <span className="text-2xl sm:text-4xl font-bold text-white tracking-tight">
+                        {config.personalInfo.name.split(' ').map(n => n[0]).join('')}
+                      </span>
+                    </div>
+                    
+                    {/* Subtle Ring */}
+                    <div className="absolute inset-0 rounded-full border-2 border-accent/20 animate-pulse" />
+                  </div>
+                </div>
+                
+                {/* Professional Label */}
+                <div className="hidden sm:block absolute bottom-6 left-6 right-6">
+                  <div className="glass rounded-lg px-4 py-2 border border-accent/20">
+                    <p className="text-sm font-medium text-accent text-center tracking-wide">
+                      Professional Photo
+                    </p>
+                  </div>
+                </div>
+                
+                {/* Hover Effect */}
+                <div className="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              </div>
+              
+              {/* Floating Elements */}
+              <div className="absolute -top-3 -right-3 w-6 h-6 bg-accent/30 rounded-full blur-sm animate-pulse" />
+              <div className="absolute -bottom-3 -left-3 w-4 h-4 bg-accent-strong/30 rounded-full blur-sm" />
+            </div>
+          </motion.div>
+
+          {/* Content Column */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+            className="text-left lg:pr-8"
+          >
+            {/* Status Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 glass rounded-full border border-cyan-400/20 mb-6">
               <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse" />
               <span className="text-xs font-medium text-cyan-400 uppercase tracking-wider">
                 {t('status')}
               </span>
             </div>
-          </motion.div>
 
-          {/* Name - Subtle neon display */}
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl mb-6 font-display leading-tight relative type-display"
-          >
-            <span className="relative z-10 text-neon-cyan">
-              {name}
-            </span>
-          </motion.h1>
+            {/* Role/Title - Most Prominent */}
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl mb-3 font-display font-light tracking-tight text-text leading-tight">
+              <TypingText texts={roles} className="text-accent font-medium" />
+            </h1>
 
-          {/* Title/Role */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-            className="mb-6"
-          >
-            <p className="type-h3">
-              {config.personalInfo.title}
+            {/* Name - Elegant Secondary */}
+            <h2 className="text-lg sm:text-xl mb-6 font-medium text-muted tracking-wide">
+              {config.personalInfo.name}
+            </h2>
+
+            {/* Value Statement - Dynamic */}
+            <p className="text-xl sm:text-2xl mb-8 font-light text-text leading-relaxed max-w-lg">
+              Crafting <span className="text-accent font-medium">scalable solutions</span> that bridge innovation and impact.
             </p>
-          </motion.div>
 
-          {/* Bio - Improved Readability */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-            className="type-body mb-14 max-w-2xl mx-auto px-4"
-          >
-            {config.personalInfo.bio}
-          </motion.p>
-
-          {/* What I Work On - Refined Cards */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-            className="mb-16 max-w-4xl mx-auto"
-          >
-            <motion.h2
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-              className="type-caption type-muted text-center mb-6"
-            >
-              {t('workOn')}
-            </motion.h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
-            {services.map((service, index) => {
-              const Icon = service.icon;
-              return (
-                  <Link key={service.title} href={service.href}>
-                <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.6, delay: 0.6 + index * 0.1, ease: [0.25, 0.1, 0.25, 1] }}
-                      whileHover={{ y: -4, scale: 1.02 }}
-                      className="group glass-strong rounded-2xl p-6 md:p-8 border border-cyan-400/20 hover:border-cyan-400/40 transition-all duration-300 cursor-pointer"
-                >
-                      <div className={`w-14 h-14 md:w-16 md:h-16 mx-auto mb-4 rounded-xl bg-gradient-to-br ${service.gradient} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                        <Icon className="w-7 h-7 md:w-8 md:h-8 text-white" />
-                  </div>
-                      <h3 className="text-xs md:text-sm font-semibold text-white uppercase tracking-wider text-center font-display">
-                    {service.title}
-                  </h3>
-                </motion.div>
-                  </Link>
-              );
-            })}
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 mb-12">
+              <Link
+                href="/#projects"
+                className="btn-futuristic px-8 py-4 text-base font-medium"
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  {t('cta')}
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </span>
+              </Link>
+              
+              <Link
+                href="/#contact"
+                className="px-6 py-3 glass rounded-lg border border-cyan-400/20 text-cyan-400/90 hover:border-cyan-400/40 hover:text-cyan-400 hover:bg-cyan-400/5 transition-all uppercase font-medium tracking-wider text-sm"
+              >
+                {t('contact')}
+              </Link>
             </div>
-          </motion.div>
 
-          {/* Slogan - Subtle */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7, delay: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-            className="mb-12"
-          >
-            <p className="text-xl sm:text-2xl md:text-3xl font-bold font-display">
-              <span className="gradient-slogan">
-                {t('slogan.code')}
-              </span>
-              <span className="text-gray-400 mx-2">·</span>
-              <span className="gradient-slogan">
-                {t('slogan.learn')}
-              </span>
-              <span className="text-gray-400 mx-2">·</span>
-              <span className="gradient-slogan">
-                {t('slogan.innovate')}
-              </span>
-              <span className="text-gray-400 mx-2">·</span>
-              <span className="gradient-slogan">
-                {t('slogan.grow')}
-              </span>
-            </p>
-          </motion.div>
-
-          {/* CTA Buttons - Improved Hierarchy */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-          >
-            {/* Primary CTA */}
-            <Link
-              href="/#projects"
-              className="group btn-futuristic relative overflow-hidden px-8 py-4 text-base font-medium"
-            >
-              <span className="relative z-10 flex items-center gap-2">
-                {t('cta')}
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </span>
-            </Link>
-            
-            {/* Secondary CTA */}
-            <Link
-              href="/#contact"
-              className="px-6 py-3 glass rounded-lg border border-cyan-400/20 text-cyan-400/90 hover:border-cyan-400/40 hover:text-cyan-400 hover:bg-cyan-400/5 transition-all uppercase font-medium tracking-wider text-sm"
-            >
-              {t('contact')}
-            </Link>
+            {/* Services Preview */}
+            <div className="grid grid-cols-3 gap-2 sm:gap-4">
+              {services.map((service, index) => {
+                const Icon = service.icon;
+                return (
+                  <Link key={service.title} href={service.href}>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.6 + index * 0.1 }}
+                      className="group glass rounded-xl p-2 sm:p-4 border border-cyan-400/20 hover:border-cyan-400/40 transition-all duration-300 text-center"
+                    >
+                      <div className={`w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-1 sm:mb-2 rounded-lg bg-gradient-to-br ${service.gradient} flex items-center justify-center`}>
+                        <Icon className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
+                      </div>
+                      <h3 className="text-[10px] sm:text-xs font-semibold text-white uppercase tracking-wider">
+                        {service.title}
+                      </h3>
+                    </motion.div>
+                  </Link>
+                );
+              })}
+            </div>
           </motion.div>
         </div>
 
@@ -187,7 +174,7 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
+          transition={{ duration: 1, delay: 1.2 }}
           className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
         >
           <motion.div

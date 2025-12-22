@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ServicesRepository } from '@/lib/db/repositories';
+import { ProfileRepository } from '@/lib/db/repositories';
 import type { Locale } from '@/lib/db/types';
 
 export async function GET(request: NextRequest) {
@@ -7,24 +7,30 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const locale = (searchParams.get('locale') || 'en') as Locale;
     
-    const services = await ServicesRepository.getAll(locale);
-    return NextResponse.json(services);
+    const profile = await ProfileRepository.getByLocale(locale);
+    
+    if (!profile) {
+      return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
+    }
+    
+    return NextResponse.json(profile);
   } catch (error) {
-    console.error('Services GET error:', error);
+    console.error('Profile GET error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function PUT(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const locale = (searchParams.get('locale') || 'en') as Locale;
-    const { service, features = [], technologies = [] } = await request.json();
+    const data = await request.json();
     
-    const newService = await ServicesRepository.create(locale, service, features, technologies);
-    return NextResponse.json(newService, { status: 201 });
+    const profile = await ProfileRepository.upsert(locale, data);
+    
+    return NextResponse.json(profile);
   } catch (error) {
-    console.error('Services POST error:', error);
+    console.error('Profile PUT error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

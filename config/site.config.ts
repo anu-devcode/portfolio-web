@@ -12,6 +12,7 @@ export interface SiteConfig {
     github?: string;
     linkedin?: string;
     twitter?: string;
+    telegram?: string;
     portfolio?: string;
   };
   theme: {
@@ -38,6 +39,7 @@ export const defaultConfig: SiteConfig = {
     name: "Anwar Hussen",
     title: "Software Engineer",
     email: "anwarhussen3683@gmail.com",
+    phone: "+251953814499",
     location: "Addis Ababa, Ethiopia",
     bio: "Junior Software Engineer focused on backend systems and AI, building scalable solutions that solve real-world problems.",
   },
@@ -45,6 +47,7 @@ export const defaultConfig: SiteConfig = {
     github: "https://github.com/anu-devcode",
     linkedin: "https://linkedin.com/in/anwar-hussen-3683",
     twitter: "https://twitter.com/anu_devcode",
+    telegram: "https://t.me/Billaden5",
   },
   theme: {
     primaryColor: "blue",

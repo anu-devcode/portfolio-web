@@ -259,6 +259,30 @@ CREATE TRIGGER update_profile_updated_at BEFORE UPDATE ON profile
 CREATE TRIGGER update_hero_data_updated_at BEFORE UPDATE ON hero_data
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+CREATE TRIGGER update_services_updated_at BEFORE UPDATE ON services
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_skills_updated_at BEFORE UPDATE ON skills
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_projects_updated_at BEFORE UPDATE ON projects
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_work_experiences_updated_at BEFORE UPDATE ON work_experiences
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_certificates_updated_at BEFORE UPDATE ON certificates
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_blog_posts_updated_at BEFORE UPDATE ON blog_posts
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_chat_sessions_updated_at BEFORE UPDATE ON chat_sessions
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();ted_at_column();
+
 CREATE TRIGGER update_hero_services_updated_at BEFORE UPDATE ON hero_services
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
