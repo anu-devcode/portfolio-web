@@ -11,6 +11,12 @@ const config: Config = {
     extend: {
       colors: {
         // Futuristic color palette
+        bg: 'var(--bg-primary)',
+        surface: 'var(--surface)',
+        text: 'var(--text-primary)',
+        muted: 'var(--text-muted)',
+        accent: 'var(--accent)',
+        'accent-strong': 'var(--accent-strong)',
         charcoal: {
           50: '#1a1a1a',
           100: '#0f0f0f',

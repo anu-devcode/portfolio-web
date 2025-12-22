@@ -55,12 +55,12 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          {/* Name - Neon Glowing Style */}
+          {/* Name - Subtle neon display */}
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold mb-6 font-display leading-tight relative"
+            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl mb-6 font-display leading-tight relative type-display"
           >
             <span className="relative z-10 text-neon-cyan">
               {name}
@@ -72,9 +72,9 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-            className="mb-8"
+            className="mb-6"
           >
-            <p className="text-lg sm:text-xl md:text-2xl text-gray-300 font-light">
+            <p className="type-h3">
               {config.personalInfo.title}
             </p>
           </motion.div>
@@ -84,7 +84,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-            className="text-base sm:text-lg md:text-xl text-gray-400 mb-16 max-w-2xl mx-auto font-light leading-relaxed px-4"
+            className="type-body mb-14 max-w-2xl mx-auto px-4"
           >
             {config.personalInfo.bio}
           </motion.p>
@@ -100,32 +100,32 @@ export default function Hero() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-xs font-medium text-gray-400 uppercase tracking-widest text-center mb-8"
+              className="type-caption type-muted text-center mb-6"
             >
               {t('workOn')}
             </motion.h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
-              {services.map((service, index) => {
-                const Icon = service.icon;
-                return (
+            {services.map((service, index) => {
+              const Icon = service.icon;
+              return (
                   <Link key={service.title} href={service.href}>
-                    <motion.div
+                <motion.div
                       initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
+                  animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.6, delay: 0.6 + index * 0.1, ease: [0.25, 0.1, 0.25, 1] }}
                       whileHover={{ y: -4, scale: 1.02 }}
                       className="group glass-strong rounded-2xl p-6 md:p-8 border border-cyan-400/20 hover:border-cyan-400/40 transition-all duration-300 cursor-pointer"
-                    >
+                >
                       <div className={`w-14 h-14 md:w-16 md:h-16 mx-auto mb-4 rounded-xl bg-gradient-to-br ${service.gradient} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                         <Icon className="w-7 h-7 md:w-8 md:h-8 text-white" />
-                      </div>
+                  </div>
                       <h3 className="text-xs md:text-sm font-semibold text-white uppercase tracking-wider text-center font-display">
-                        {service.title}
-                      </h3>
-                    </motion.div>
+                    {service.title}
+                  </h3>
+                </motion.div>
                   </Link>
-                );
-              })}
+              );
+            })}
             </div>
           </motion.div>
 
@@ -137,19 +137,19 @@ export default function Hero() {
             className="mb-12"
           >
             <p className="text-xl sm:text-2xl md:text-3xl font-bold font-display">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-yellow-400 to-orange-500">
+              <span className="gradient-slogan">
                 {t('slogan.code')}
               </span>
               <span className="text-gray-400 mx-2">·</span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-400 to-red-500">
+              <span className="gradient-slogan">
                 {t('slogan.learn')}
               </span>
               <span className="text-gray-400 mx-2">·</span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-red-400 to-pink-500">
+              <span className="gradient-slogan">
                 {t('slogan.innovate')}
               </span>
               <span className="text-gray-400 mx-2">·</span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-pink-400 to-purple-500">
+              <span className="gradient-slogan">
                 {t('slogan.grow')}
               </span>
             </p>

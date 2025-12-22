@@ -1,344 +1,355 @@
-'use client';
+﻿"use client";
 
-import { useTranslations, useLocale } from 'next-intl';
-import { Link, usePathname } from '@/i18n/routing';
-import { useState, useEffect } from 'react';
-import { Menu, X, Globe, Home, User, Briefcase, Mail, Settings } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import ThemeToggle from './ThemeToggle';
-import { useLocalizedConfig } from '@/hooks/useLocalizedConfig';
-import { useLanguagePreference } from '@/hooks/useLanguagePreference';
+import { useTranslations, useLocale } from "next-intl";
+import { Link, usePathname } from "@/i18n/routing";
+import React, { useEffect, useRef, useState, useCallback } from "react";
+import { Menu, X, Globe } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import ThemeToggle from "./ThemeToggle";
+import { useLocalizedConfig } from "@/hooks/useLocalizedConfig";
+import { useLanguagePreference } from "@/hooks/useLanguagePreference";
 
-export default function Navbar() {
-  const t = useTranslations('nav');
+export default function Navbar(): JSX.Element {
+  const t = useTranslations("nav");
   const locale = useLocale();
   const pathname = usePathname();
   const config = useLocalizedConfig();
-  const { switchLanguage, isChanging } = useLanguagePreference();
-  const [isOpen, setIsOpen] = useState(false);
-  const [showLangMenu, setShowLangMenu] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState<string>('');
+  const { switchLanguage } = useLanguagePreference();
 
-  // Check if we're on the home page
-  const isHomePage = pathname === '/' || pathname === `/${locale}` || pathname === '';
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [active, setActive] = useState<string>("home");
+  const mobileRef = useRef<HTMLDivElement | null>(null);
+  const langRef = useRef<HTMLDivElement | null>(null);
+
+  const isHomePage = pathname === "/" || pathname === `/${locale}` || pathname === "";
 
   const navItems = [
-    { href: '/', label: t('home'), icon: Home, section: '' },
-    { href: '/#about', label: t('about'), icon: User, section: 'about' },
-    { href: '/#services', label: t('services'), icon: Settings, section: 'services' },
-    { href: '/#projects', label: t('projects'), icon: Briefcase, section: 'projects' },
-    { href: '/#contact', label: t('contact'), icon: Mail, section: 'contact' },
+    { href: "/", label: t("home"), section: "home" },
+    { href: "/#about", label: t("about"), section: "about" },
+    { href: "/#services", label: t("services"), section: "services" },
+    { href: "/#projects", label: t("projects"), section: "projects" },
+    { href: "/contact", label: t("contact"), section: "contact" },
   ];
 
-  // Scroll spy: detect which section is currently visible
-  useEffect(() => {
-    if (!isHomePage) {
-      setActiveSection('');
-      return;
+  const handleScroll = useCallback(() => {
+    setScrolled(window.scrollY > 10);
+
+    if (!isHomePage) return;
+
+    const sections = ["about", "services", "projects", "contact"];
+    let found = "home";
+
+    for (const id of sections) {
+      const el = document.getElementById(id);
+      if (!el) continue;
+      const rect = el.getBoundingClientRect();
+      if (rect.top <= window.innerHeight * 0.4 && rect.bottom > 100) {
+        found = id;
+        break;
+      }
     }
 
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+    if (window.scrollY < 100) found = "home";
+    setActive(found);
+  }, [isHomePage]);
 
-      // Section IDs to check
-      const sectionIds = ['about', 'services', 'projects', 'contact'];
-      const viewportHeight = window.innerHeight;
-      const scrollOffset = 100; // Offset for navbar
+  useEffect(() => {
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
 
-      let currentSection = '';
-
-      // Check each section to see which one is most visible
-      for (const sectionId of sectionIds) {
-        const element = document.getElementById(sectionId);
-        if (!element) continue;
-
-        const rect = element.getBoundingClientRect();
-        const elementTop = rect.top;
-        const elementBottom = rect.bottom;
-        const elementHeight = rect.height;
-
-        // Section is active if:
-        // 1. Top of section is above the trigger point (40% of viewport)
-        // 2. Bottom of section is below the trigger point
-        if (elementTop <= viewportHeight * 0.4 + scrollOffset && elementBottom >= scrollOffset) {
-          currentSection = sectionId;
-        }
+  // Close menus on escape key and outside clicks
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setMobileOpen(false);
+        setLangOpen(false);
       }
-
-      // If we're at the top of the page, show home as active
-      if (window.scrollY < 150) {
-        currentSection = '';
-      }
-
-      setActiveSection(currentSection);
     };
 
-    // Initial check after a short delay to ensure DOM is ready
-    const timeoutId = setTimeout(handleScroll, 100);
+    const handleClickOutside = (e: MouseEvent) => {
+      if (langRef.current && !langRef.current.contains(e.target as Node)) {
+        setLangOpen(false);
+      }
+      if (mobileRef.current && !mobileRef.current.contains(e.target as Node)) {
+        setMobileOpen(false);
+      }
+    };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-      clearTimeout(timeoutId);
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isHomePage, pathname]);
+  }, []);
 
-  const toggleLocale = (newLocale: 'en' | 'am') => {
-    // Close menu first for smooth UX
-    setShowLangMenu(false);
-    
-    // Small delay to allow menu close animation
-    setTimeout(() => {
-      switchLanguage(newLocale);
-    }, 150);
-  };
+  // Focus management for mobile menu
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const timer = setTimeout(() => {
+      const firstFocusable = mobileRef.current?.querySelector("a, button") as HTMLElement;
+      firstFocusable?.focus();
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [mobileOpen]);
+
+  const handleNavClick = useCallback((href: string, close?: () => void) => (e: React.MouseEvent) => {
+    if (close) close();
+
+    if (href.includes("#")) {
+      const id = href.split("#")[1];
+      const element = document.getElementById(id);
+      if (element) {
+        e.preventDefault();
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
+    }
+
+    if (href === "/" || href === `/${locale}`) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [locale]);
+
+  const changeLocale = useCallback((newLocale: "en" | "am") => {
+    setLangOpen(false);
+    switchLanguage(newLocale);
+  }, [switchLanguage]);
+
+  const NavLink = React.memo(({ href, children, isActive, close }: { 
+    href: string; 
+    children: React.ReactNode; 
+    isActive?: boolean; 
+    close?: () => void; 
+  }) => (
+    <Link
+      href={href}
+      onClick={handleNavClick(href, close)}
+      className={`relative px-4 py-2 text-sm font-medium transition-all duration-200 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50 ${
+        isActive 
+          ? "text-text bg-accent/10" 
+          : "text-muted hover:text-text hover:bg-surface/50"
+      }`}
+      aria-current={isActive ? "page" : undefined}
+    >
+      {children}
+      {isActive && (
+        <motion.div
+          layoutId="nav-indicator"
+          className="absolute inset-0 bg-accent/10 rounded-md border border-accent/20"
+          transition={{ type: "spring", stiffness: 400, damping: 30 }}
+        />
+      )}
+    </Link>
+  ));
+
+  NavLink.displayName = "NavLink";
 
   return (
     <>
-      {/* Floating Desktop Navigation */}
-      <motion.nav
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-        className={`hidden lg:block fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ${
-          scrolled ? 'scale-95' : 'scale-100'
+      {/* Desktop Navigation */}
+      <header
+        className={`hidden lg:block fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+          scrolled 
+            ? "glass border-b border-accent/10 shadow-lg" 
+            : "bg-transparent"
         }`}
       >
-        <div className="glass-strong rounded-full px-6 py-3 border-glow">
-          <div className="flex items-center space-x-1">
-            {navItems.map((item, index) => {
-              const Icon = item.icon;
-              // For home page: use scroll-based active state
-              // For other pages: use route-based active state
-              const isActive = isHomePage
-                ? activeSection === item.section
-                : (pathname === item.href.replace('#', '') || (item.href === '/' && pathname === '/'));
-              
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="relative group px-4 py-2 rounded-full transition-all duration-300"
-                >
-                  <div className="flex items-center space-x-2">
-                    <Icon className={`w-4 h-4 transition-colors duration-300 ${
-                      isActive 
-                        ? 'text-cyan-400' 
-                        : 'text-gray-400 group-hover:text-cyan-400'
-                    }`} />
-                    <span className={`text-sm font-medium uppercase tracking-wider transition-colors duration-300 ${
-                      isActive 
-                        ? 'text-cyan-400 text-glow-cyan' 
-                        : 'text-gray-300 group-hover:text-cyan-400'
-                    }`}>
-                      {item.label}
-                    </span>
-                  </div>
-                  
-                  {/* Hover glow effect */}
-                  <motion.div
-                    className="absolute inset-0 rounded-full border border-cyan-400/0 group-hover:border-cyan-400/50 transition-all duration-300"
-                    initial={false}
-                    whileHover={{ boxShadow: '0 0 20px rgba(0, 240, 255, 0.3)' }}
-                  />
-                  
-                  {/* Active indicator */}
-                  {isActive && (
-                    <motion.div
-                      className="absolute inset-0 rounded-full bg-cyan-400/10 border border-cyan-400/30"
-                      layoutId="activeNav"
-                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                </Link>
-              );
-            })}
-            
-            {/* Divider */}
-            <div className="w-px h-6 bg-cyan-400/20 mx-2" />
-            
-            {/* Language Switcher */}
-            <div className="relative">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setShowLangMenu(!showLangMenu)}
-                disabled={isChanging}
-                className="flex items-center space-x-2 px-3 py-2 rounded-full text-gray-300 hover:text-cyan-400 transition-colors border border-transparent hover:border-cyan-400/30 disabled:opacity-50 disabled:cursor-not-allowed"
-                aria-label="Change language"
-              >
-                <motion.div
-                  animate={isChanging ? { rotate: 360 } : { rotate: 0 }}
-                  transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-                >
-                  <Globe className="w-4 h-4" />
-                </motion.div>
-                <span className="text-sm font-medium uppercase tracking-wider">{locale}</span>
-              </motion.button>
-              
-              <AnimatePresence>
-                {showLangMenu && (
-                  <>
-                    <div 
-                      className="fixed inset-0 z-40" 
-                      onClick={() => setShowLangMenu(false)}
-                    />
-                    <motion.div
-                      initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                      transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-                      className="absolute right-0 mt-2 w-48 glass-strong rounded-lg border border-cyan-400/20 p-2 z-50 shadow-2xl"
-                    >
-                      <motion.button
-                        onClick={() => toggleLocale('en')}
-                        disabled={isChanging || locale === 'en'}
-                        whileHover={{ x: 4 }}
-                        whileTap={{ scale: 0.98 }}
-                        className={`w-full text-left px-4 py-3 rounded-md text-sm transition-all ${
-                          locale === 'en'
-                            ? 'text-cyan-400 bg-cyan-400/10 border border-cyan-400/30'
-                            : 'text-gray-300 hover:text-cyan-400 hover:bg-cyan-400/5'
-                        } ${isChanging ? 'opacity-50 cursor-not-allowed' : ''}`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <div className="font-medium">English</div>
-                            <div className="text-xs opacity-70">English</div>
-                          </div>
-                          {locale === 'en' && (
-                            <motion.div
-                              initial={{ scale: 0 }}
-                              animate={{ scale: 1 }}
-                              className="w-2 h-2 bg-cyan-400 rounded-full"
-                            />
-                          )}
-                        </div>
-                      </motion.button>
-                      <motion.button
-                        onClick={() => toggleLocale('am')}
-                        disabled={isChanging || locale === 'am'}
-                        whileHover={{ x: 4 }}
-                        whileTap={{ scale: 0.98 }}
-                        className={`w-full text-left px-4 py-3 rounded-md text-sm transition-all ${
-                          locale === 'am'
-                            ? 'text-cyan-400 bg-cyan-400/10 border border-cyan-400/30'
-                            : 'text-gray-300 hover:text-cyan-400 hover:bg-cyan-400/5'
-                        } ${isChanging ? 'opacity-50 cursor-not-allowed' : ''}`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <div className="font-medium">አማርኛ</div>
-                            <div className="text-xs opacity-70">Amharic</div>
-                          </div>
-                          {locale === 'am' && (
-                            <motion.div
-                              initial={{ scale: 0 }}
-                              animate={{ scale: 1 }}
-                              className="w-2 h-2 bg-cyan-400 rounded-full"
-                            />
-                          )}
-                        </div>
-                      </motion.button>
-                    </motion.div>
-                  </>
-                )}
-              </AnimatePresence>
-            </div>
-            
-            {/* Theme Toggle */}
-            <ThemeToggle />
-          </div>
-        </div>
-      </motion.nav>
-
-      {/* Mobile Navigation */}
-      <motion.nav
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className="lg:hidden fixed top-4 left-4 right-4 z-50"
-      >
-        <div className="glass-strong rounded-2xl px-4 py-3 border-glow">
-          <div className="flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-6">
+          <nav className="flex items-center justify-between h-16">
+            {/* Logo */}
             <Link 
               href="/" 
-              className="text-lg font-bold text-cyan-400 text-glow-cyan uppercase tracking-wider"
+              className="flex items-center gap-3 hover:opacity-80 transition-opacity"
             >
-              {config.personalInfo.name.split(' ')[0].toUpperCase()}
+              <span className="text-lg font-bold tracking-tight text-text">
+                {config.personalInfo.name}
+              </span>
             </Link>
-            
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-2 text-gray-300 hover:text-cyan-400 transition-colors"
-              aria-label="Toggle menu"
+
+            {/* Navigation Links */}
+            <div className="flex items-center gap-2">
+              {navItems.map((item) => {
+                const isActive = isHomePage 
+                  ? active === item.section 
+                  : pathname === item.href || pathname.startsWith(item.href + "/");
+                return (
+                  <NavLink key={item.href} href={item.href} isActive={isActive}>
+                    {item.label}
+                  </NavLink>
+                );
+              })}
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center gap-3">
+              <Link
+                href="/contact"
+                className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-accent text-white hover:bg-accent/90 transition-colors shadow-sm"
+              >
+                {t("hire")}
+              </Link>
+
+              <div className="relative" ref={langRef}>
+                <button
+                  type="button"
+                  aria-haspopup="menu"
+                  aria-expanded={langOpen}
+                  onClick={() => setLangOpen(!langOpen)}
+                  className="theme-toggle flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  <Globe className="w-4 h-4" />
+                  <span className="uppercase text-xs font-semibold">{locale}</span>
+                </button>
+
+                <AnimatePresence>
+                  {langOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                      className="absolute right-0 mt-2 w-40 glass rounded-lg border border-accent/20 p-2 shadow-xl z-50"
+                      role="menu"
+                      aria-label="Language selection"
+                    >
+                      <button 
+                        onClick={() => changeLocale("en")} 
+                        className={`w-full text-left px-3 py-2 rounded-md text-sm transition-colors ${
+                          locale === "en" 
+                            ? "text-text bg-accent/10" 
+                            : "text-muted hover:text-text hover:bg-surface/50"
+                        }`}
+                      >
+                        English
+                      </button>
+                      <button 
+                        onClick={() => changeLocale("am")} 
+                        className={`w-full text-left px-3 py-2 rounded-md text-sm transition-colors ${
+                          locale === "am" 
+                            ? "text-text bg-accent/10" 
+                            : "text-muted hover:text-text hover:bg-surface/50"
+                        }`}
+                      >
+                        አማርኛ
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              <ThemeToggle />
+            </div>
+          </nav>
+        </div>
+      </header>
+
+      {/* Mobile Navigation */}
+      <header className="lg:hidden fixed inset-x-0 top-0 z-50 glass border-b border-accent/10">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-between h-16">
+            <Link 
+              href="/" 
+              className="text-lg font-bold text-text hover:opacity-80 transition-opacity"
             >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+              {config.personalInfo.name}
+            </Link>
+
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <button
+                type="button"
+                aria-label={mobileOpen ? "Close menu" : "Open menu"}
+                aria-expanded={mobileOpen}
+                aria-controls="mobile-menu"
+                onClick={() => setMobileOpen(!mobileOpen)}
+                className="p-2 rounded-md theme-toggle transition-transform duration-200"
+              >
+                <motion.div
+                  animate={{ rotate: mobileOpen ? 180 : 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                </motion.div>
+              </button>
+            </div>
           </div>
         </div>
 
         <AnimatePresence>
-          {isOpen && (
+          {mobileOpen && (
             <motion.div
-              initial={{ opacity: 0, y: -20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -20, scale: 0.95 }}
-              className="mt-4 glass-strong rounded-2xl p-4 border-glow"
+              id="mobile-menu"
+              ref={mobileRef}
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="overflow-hidden border-t border-accent/10"
+              role="menu"
+              aria-label="Mobile navigation"
             >
-              <div className="space-y-2">
+              <div className="glass-strong p-4 space-y-2">
                 {navItems.map((item) => {
-                  const Icon = item.icon;
+                  const isActive = isHomePage 
+                    ? active === item.section 
+                    : pathname === item.href || pathname.startsWith(item.href + "/");
                   return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setIsOpen(false)}
-                      className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:text-cyan-400 hover:bg-cyan-400/10 transition-all border border-transparent hover:border-cyan-400/30"
+                    <NavLink 
+                      key={item.href} 
+                      href={item.href} 
+                      isActive={isActive}
+                      close={() => setMobileOpen(false)}
                     >
-                      <Icon className="w-5 h-5" />
-                      <span className="font-medium uppercase tracking-wider">{item.label}</span>
-                    </Link>
+                      {item.label}
+                    </NavLink>
                   );
                 })}
-                
-                <div className="pt-4 mt-4 border-t border-cyan-400/20 flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <Globe className="w-5 h-5 text-gray-400" />
-                    <motion.button
-                      onClick={() => toggleLocale('en')}
-                      disabled={isChanging || locale === 'en'}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                        locale === 'en'
-                          ? 'text-cyan-400 bg-cyan-400/10 border border-cyan-400/30'
-                          : 'text-gray-400 hover:text-cyan-400'
-                      } ${isChanging ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    >
-                      EN
-                    </motion.button>
-                    <motion.button
-                      onClick={() => toggleLocale('am')}
-                      disabled={isChanging || locale === 'am'}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                        locale === 'am'
-                          ? 'text-cyan-400 bg-cyan-400/10 border border-cyan-400/30'
-                          : 'text-gray-400 hover:text-cyan-400'
-                      } ${isChanging ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    >
-                      አማ
-                    </motion.button>
+
+                <div className="pt-4 mt-4 border-t border-accent/10 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Globe className="w-5 h-5 text-muted" />
+                    <div className="flex gap-2">
+                      <button 
+                        onClick={() => changeLocale("en")} 
+                        className={`px-3 py-1 rounded-md text-sm transition-colors ${
+                          locale === "en" 
+                            ? "text-text bg-accent/10" 
+                            : "text-muted hover:text-text hover:bg-surface/50"
+                        }`}
+                      >
+                        EN
+                      </button>
+                      <button 
+                        onClick={() => changeLocale("am")} 
+                        className={`px-3 py-1 rounded-md text-sm transition-colors ${
+                          locale === "am" 
+                            ? "text-text bg-accent/10" 
+                            : "text-muted hover:text-text hover:bg-surface/50"
+                        }`}
+                      >
+                        አማ
+                      </button>
+                    </div>
                   </div>
-                  <ThemeToggle />
+
+                  <Link 
+                    href="/contact" 
+                    onClick={handleNavClick("/contact", () => setMobileOpen(false))} 
+                    className="inline-flex items-center px-4 py-2 rounded-full bg-accent text-white text-sm font-medium hover:bg-accent/90 transition-colors"
+                  >
+                    {t("hire")}
+                  </Link>
                 </div>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.nav>
+      </header>
     </>
   );
 }

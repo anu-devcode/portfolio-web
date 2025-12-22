@@ -31,6 +31,17 @@
   --light-accent-blue: #0066ff;
   --light-accent-blue-dark: #0052cc;
   --light-border: #e2e8f0;
+  /* Semantic design tokens (defaults = dark mode tokens) */
+  --bg-primary: linear-gradient(135deg, #000000 0%, #050505 50%, #0f0f0f 100%);
+  --surface: rgba(15,15,15,0.6);
+  --text-primary: #e6f7fb;
+  --text-muted: #9ca3af;
+  --accent: #00d9ff;
+  --accent-strong: #0066ff;
+  --radius-lg: 16px;
+  --radius-md: 8px;
+  --shadow-soft: 0 6px 18px rgba(0,0,0,0.45);
+  --glow-intensity: 0.25; /* reduce overall neon intensity */
 }
 
 * {
@@ -78,8 +89,8 @@ a, button {
 
 body {
   font-family: var(--font-inter);
-  background: linear-gradient(135deg, #000000 0%, #050505 50%, #0f0f0f 100%);
-  color: #ffffff;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
@@ -88,21 +99,18 @@ body {
 
 /* Light theme - Intentionally designed, not inverted */
 html.light body {
-  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 25%, #f1f5f9 50%, #e2e8f0 75%, #cbd5e1 100%);
-  color: #0f172a;
+  --bg-primary: linear-gradient(135deg, #ffffff 0%, #f8fafc 25%, #f1f5f9 50%, #e2e8f0 75%, #cbd5e1 100%);
+  --surface: rgba(255,255,255,0.98);
+  --text-primary: var(--light-text-primary);
+  --text-muted: var(--light-text-secondary);
+  --accent: var(--light-accent-blue);
+  --accent-strong: var(--light-accent-blue-dark);
+  color: var(--text-primary);
   position: relative;
   background-image: 
     radial-gradient(circle at 20% 50%, rgba(0, 102, 255, 0.02) 0%, transparent 50%),
     radial-gradient(circle at 80% 80%, rgba(0, 102, 255, 0.015) 0%, transparent 50%),
     radial-gradient(circle at 40% 20%, rgba(124, 58, 237, 0.01) 0%, transparent 50%);
-}
-
-/* Text colors - Light mode specific */
-html.light p,
-html.light span,
-html.light div,
-html.light li {
-  color: inherit;
 }
 
 html.light section {
@@ -148,6 +156,29 @@ html.light ::-webkit-scrollbar-thumb:hover {
     border: 1px solid rgba(0, 240, 255, 0.1);
   }
   
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 9999px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: transparent;
+    color: var(--text-primary);
+    transition: all 0.18s ease;
+  }
+
+  .theme-toggle:hover {
+    border-color: rgba(0,216,255,0.18);
+    background: rgba(0,216,255,0.03);
+  }
+
+  html.light .theme-toggle {
+    border-color: rgba(0,0,0,0.06);
+    background: transparent;
+  }
+  
   html.light .glass {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px) saturate(180%);
@@ -179,9 +210,8 @@ html.light ::-webkit-scrollbar-thumb:hover {
   
   /* Glow effects - Minimal in light mode */
   .glow-cyan {
-    box-shadow: 0 0 12px rgba(0, 240, 255, 0.4),
-                0 0 24px rgba(0, 240, 255, 0.25),
-                inset 0 0 12px rgba(0, 240, 255, 0.08);
+    box-shadow: 0 0 10px rgba(0, 216, 255, calc(var(--glow-intensity) * 0.9)),
+                0 0 18px rgba(0, 216, 255, calc(var(--glow-intensity) * 0.6));
   }
   
   html.light .glow-cyan {
@@ -190,8 +220,8 @@ html.light ::-webkit-scrollbar-thumb:hover {
   }
   
   .glow-blue {
-    box-shadow: 0 0 12px rgba(0, 102, 255, 0.4),
-                0 0 24px rgba(0, 102, 255, 0.25);
+    box-shadow: 0 0 10px rgba(0, 102, 255, calc(var(--glow-intensity) * 0.9)),
+                0 0 18px rgba(0, 102, 255, calc(var(--glow-intensity) * 0.6));
   }
   
   html.light .glow-blue {
@@ -200,8 +230,8 @@ html.light ::-webkit-scrollbar-thumb:hover {
   }
   
   .glow-purple {
-    box-shadow: 0 0 12px rgba(139, 92, 246, 0.4),
-                0 0 24px rgba(139, 92, 246, 0.25);
+    box-shadow: 0 0 10px rgba(139, 92, 246, calc(var(--glow-intensity) * 0.9)),
+                0 0 18px rgba(139, 92, 246, calc(var(--glow-intensity) * 0.6));
   }
   
   html.light .glow-purple {
@@ -229,15 +259,12 @@ html.light ::-webkit-scrollbar-thumb:hover {
     text-shadow: none;
   }
   
-  /* Neon cyan-blue glowing text style */
+  /* Neon cyan-blue glowing text style - used ONLY for hero name */
   .text-neon-cyan {
-    color: #00f0ff;
-    text-shadow: 
-      0 0 10px rgba(0, 240, 255, 0.8),
-      0 0 20px rgba(0, 240, 255, 0.6),
-      0 0 30px rgba(0, 240, 255, 0.4),
-      0 0 40px rgba(0, 102, 255, 0.3),
-      0 0 60px rgba(0, 102, 255, 0.2);
+    color: var(--accent);
+    text-shadow:
+      0 0 6px rgba(0, 216, 255, calc(var(--glow-intensity) * 0.9)),
+      0 0 12px rgba(0, 216, 255, calc(var(--glow-intensity) * 0.5));
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-weight: 700;
@@ -245,11 +272,11 @@ html.light ::-webkit-scrollbar-thumb:hover {
   }
   
   html.light .text-neon-cyan {
-    color: #0066ff;
-    text-shadow: 
-      0 0 8px rgba(0, 102, 255, 0.4),
-      0 0 16px rgba(0, 102, 255, 0.25),
-      0 0 24px rgba(0, 102, 255, 0.15);
+    color: #0052cc;
+    text-shadow:
+      0 0 6px rgba(0, 102, 255, 0.45),
+      0 0 14px rgba(0, 102, 255, 0.32),
+      0 0 22px rgba(0, 102, 255, 0.22);
   }
   
   /* Crisp text - No glow, high contrast */
@@ -261,7 +288,7 @@ html.light ::-webkit-scrollbar-thumb:hover {
     letter-spacing: -0.02em;
   }
   
-  /* Soft luminous background for headings */
+  /* Soft luminous background for headings (used sparingly) */
   .heading-luminous {
     position: relative;
   }
@@ -326,11 +353,11 @@ html.light ::-webkit-scrollbar-thumb:hover {
   }
   
   .gradient-name {
-    background: linear-gradient(135deg, #00f0ff 0%, #0066ff 50%, #8b5cf6 100%);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 50%, #8b5cf6 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    filter: drop-shadow(0 0 20px rgba(0, 240, 255, 0.5));
+    filter: drop-shadow(0 0 10px rgba(0, 216, 255, calc(var(--glow-intensity) * 0.6)));
   }
   
   html.light .gradient-name {
@@ -346,13 +373,19 @@ html.light ::-webkit-scrollbar-thumb:hover {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    text-shadow:
+      0 0 6px rgba(16, 185, 129, 0.4),
+      0 0 12px rgba(245, 158, 11, 0.35);
   }
   
   html.light .gradient-slogan {
-    background: linear-gradient(135deg, #059669 0%, #d97706 50%, #ea580c 100%);
+    background: linear-gradient(135deg, #10b981 0%, #f59e0b 50%, #f97316 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    text-shadow:
+      0 0 4px rgba(37, 99, 235, 0.25),
+      0 0 10px rgba(15, 23, 42, 0.18);
   }
   
   .perspective-3d {
@@ -369,19 +402,18 @@ html.light ::-webkit-scrollbar-thumb:hover {
   }
   
   .hover-lift:hover {
-    transform: translateY(-8px) translateZ(20px);
-    box-shadow: 0 20px 40px rgba(0, 240, 255, 0.3);
+    transform: translateY(-6px) translateZ(12px);
+    box-shadow: var(--shadow-soft);
   }
   
   html.light .hover-lift:hover {
-    transform: translateY(-8px) translateZ(20px);
-    box-shadow: 0 20px 40px rgba(0, 102, 255, 0.15);
+    transform: translateY(-6px) translateZ(12px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.08);
   }
   
   .border-glow {
-    border: 1px solid rgba(0, 240, 255, 0.3);
-    box-shadow: 0 0 6px rgba(0, 240, 255, 0.15),
-                inset 0 0 6px rgba(0, 240, 255, 0.08);
+    border: 1px solid rgba(0,216,255,0.18);
+    box-shadow: 0 0 6px rgba(0,216,255,calc(var(--glow-intensity) * 0.15));
   }
   
   html.light .border-glow {
@@ -390,9 +422,8 @@ html.light ::-webkit-scrollbar-thumb:hover {
   }
   
   .border-glow-hover:hover {
-    border-color: rgba(0, 240, 255, 0.6);
-    box-shadow: 0 0 12px rgba(0, 240, 255, 0.3),
-                inset 0 0 12px rgba(0, 240, 255, 0.15);
+    border-color: rgba(0,216,255,0.36);
+    box-shadow: 0 0 10px rgba(0,216,255,calc(var(--glow-intensity) * 0.25));
   }
   
   html.light .border-glow-hover:hover {
@@ -443,6 +474,101 @@ html.light ::-webkit-scrollbar-thumb:hover {
   
   .text-balance {
     text-wrap: balance;
+  }
+
+  /* ----------------------------- */
+  /* Editorial typography system   */
+  /* ----------------------------- */
+
+  /* Display for hero name */
+  .type-display {
+    font-family: var(--font-space-grotesk);
+    font-weight: 800;
+    letter-spacing: -0.06em;
+    line-height: 0.9;
+    text-transform: uppercase;
+  }
+
+  /* Page / section titles */
+  .type-h1 {
+    font-family: var(--font-space-grotesk);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+  }
+
+  .type-h2 {
+    font-family: var(--font-space-grotesk);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.12;
+    font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+  }
+
+  .type-h3 {
+    font-family: var(--font-space-grotesk);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    font-size: clamp(1.2rem, 1.9vw, 1.5rem);
+  }
+
+  /* Body copy */
+  .type-body {
+    font-size: 1rem;
+    line-height: 1.65;
+    letter-spacing: 0;
+    color: var(--text-primary);
+  }
+
+  .type-body-strong {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    font-weight: 500;
+    color: #f3f4f6;
+  }
+
+  .type-caption {
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .type-muted {
+    color: #9ca3af;
+  }
+
+  /* Light-mode typography defaults (high contrast + gentle depth) */
+  html.light .type-body,
+  html.light .type-body-strong {
+    color: var(--light-text-primary);
+    text-shadow: 0 1px 1px rgba(148, 163, 184, 0.2);
+  }
+  
+  html.light .type-muted {
+    color: var(--light-text-secondary);
+  }
+  
+  html.light .type-caption {
+    color: var(--light-text-secondary);
+    text-shadow: 0 1px 1px rgba(148, 163, 184, 0.18);
+  }
+  
+  html.light .type-h1,
+  html.light .type-h2,
+  html.light .type-h3 {
+    color: var(--light-text-primary);
+  }
+
+  /* Dark mode text overrides for higher readability */
+  html:not(.light) .text-gray-300 {
+    color: #e5e7eb !important;
+  }
+
+  html:not(.light) .text-gray-400,
+  html:not(.light) .text-gray-500 {
+    color: #d4d4d8 !important;
   }
 }
 
@@ -630,8 +756,15 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.02em;
 }
 
-html.light h1, html.light h2, html.light h3, html.light h4, html.light h5, html.light h6 {
+/* Light-mode headings: solid dark text with subtle depth */
+html.light h1,
+html.light h2,
+html.light h3,
+html.light h4,
+html.light h5,
+html.light h6 {
   color: #0f172a;
+  text-shadow: 0 1px 1px rgba(148, 163, 184, 0.25);
 }
 
 h1 {
@@ -650,13 +783,13 @@ h3 {
 .btn-futuristic {
   position: relative;
   padding: 0.875rem 2rem;
-  background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(0, 102, 255, 0.1));
-  border: 1px solid rgba(0, 240, 255, 0.3);
-  color: #00f0ff;
+  background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid rgba(0,216,255,0.12);
+  color: var(--accent);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  border-radius: 0.5rem;
+  border-radius: 2rem;
   overflow: hidden;
   transition: all 0.3s ease;
   cursor: pointer;
@@ -674,9 +807,9 @@ h3 {
 }
 
 html.light .btn-futuristic {
-  border: 1px solid rgba(0, 102, 255, 0.3);
-  color: var(--light-accent-blue);
-  background: linear-gradient(135deg, rgba(0, 102, 255, 0.08), rgba(37, 99, 235, 0.08));
+  border: 1px solid rgba(37,99,235,0.12);
+  color: var(--accent-strong);
+  background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.98));
 }
 
 html.light .btn-futuristic::before {
@@ -688,11 +821,8 @@ html.light .btn-futuristic::before {
 }
 
 .btn-futuristic:hover {
-  border-color: rgba(0, 240, 255, 0.6);
-  box-shadow: 
-    0 0 25px rgba(0, 240, 255, 0.4),
-    inset 0 0 25px rgba(0, 240, 255, 0.15),
-    0 0 50px rgba(0, 240, 255, 0.25);
+  border-color: rgba(0,216,255,0.28);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.36);
   transform: translateY(-2px);
 }
 
@@ -724,7 +854,9 @@ html.light h1.text-white,
 html.light h2.text-white,
 html.light h3.text-white {
   color: #0f172a !important;
-  text-shadow: none;
+  text-shadow: 0 0 6px rgba(0, 102, 255, 0.45),
+      0 0 14px rgba(0, 102, 255, 0.32),
+      0 0 22px rgba(0, 102, 255, 0.22);
   font-weight: 800;
   letter-spacing: -0.03em;
 }

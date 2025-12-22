@@ -289,16 +289,16 @@ export default function Services() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 glass rounded-full border border-cyan-400/20 mb-6">
             <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse" />
-            <span className="text-xs font-medium text-cyan-400 uppercase tracking-wider">
+            <span className="type-caption text-cyan-400">
               {t('status')}
             </span>
           </div>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 font-display relative">
-            <span className="relative z-10 text-neon-cyan">
+          <h1 className="type-h1 mb-5 font-display relative heading-luminous">
+            <span className="relative z-10 text-white">
               {t('title')}
             </span>
           </h1>
-          <p className="text-lg sm:text-xl text-gray-400 dark:text-gray-500 max-w-3xl mx-auto font-light leading-relaxed">
+          <p className="type-body max-w-3xl mx-auto">
             {t('subtitle')}
           </p>
         </motion.div>
@@ -309,9 +309,9 @@ export default function Services() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-2xl sm:text-3xl md:text-4xl font-bold mb-10 md:mb-12 text-center font-display"
+            className="type-h2 mb-10 md:mb-12 text-center font-display heading-luminous"
           >
-            <span className="text-neon-cyan">
+            <span className="relative z-10 text-white">
               {t('servicesTitle')}
             </span>
           </motion.h2>
@@ -353,10 +353,10 @@ export default function Services() {
 
                     {/* Content */}
                     <div className="relative z-10">
-                      <h3 className="text-lg md:text-xl font-bold text-white mb-3 font-display uppercase tracking-tight">
+                      <h3 className="type-h3 mb-3 font-display">
                         {service.title}
                       </h3>
-                      <p className="text-gray-400 mb-4 font-light leading-relaxed text-sm">
+                      <p className="type-body mb-4 text-sm">
                         {service.description}
                       </p>
 
@@ -369,7 +369,7 @@ export default function Services() {
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.1 + featureIndex * 0.05 }}
-                          className="flex items-center text-gray-400 text-sm font-light"
+                          className="flex items-center text-sm type-body"
                         >
                           <CheckCircle className="w-4 h-4 text-cyan-400 mr-2 flex-shrink-0" />
                           <span>{feature}</span>
@@ -396,7 +396,7 @@ export default function Services() {
                       {/* Learn More */}
                       <motion.div
                         animate={{ x: isHovered ? 5 : 0 }}
-                        className="flex items-center text-cyan-400 text-sm font-medium uppercase tracking-wider cursor-pointer group/link"
+                        className="flex items-center text-cyan-400 text-xs font-medium uppercase tracking-wider cursor-pointer group/link"
                       >
                         <span>{t('learnMore')}</span>
                         <ArrowRight className="w-4 h-4 ml-2 group-hover/link:translate-x-1 transition-transform" />
@@ -420,9 +420,9 @@ export default function Services() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-2xl sm:text-3xl md:text-4xl font-bold mb-10 md:mb-12 text-center font-display"
+            className="type-h2 mb-10 md:mb-12 text-center font-display heading-luminous"
           >
-            <span className="text-neon-cyan">
+            <span className="relative z-10 text-white">
               {t('skillsTitle')}
             </span>
           </motion.h2>
@@ -444,7 +444,7 @@ export default function Services() {
                     onClick={() => setExpandedCategory(isExpanded ? null : category.name)}
                     className="w-full flex items-center justify-between mb-4"
                   >
-                    <h3 className="text-lg md:text-xl font-bold text-white font-display uppercase tracking-tight">
+                    <h3 className="type-h3 font-display">
                       {category.name}
                     </h3>
                     <motion.div

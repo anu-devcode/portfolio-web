@@ -23,18 +23,18 @@ export default function ThemeToggle() {
   if (!mounted) {
     // Return a placeholder to prevent hydration mismatch
     return (
-      <div className="p-2 rounded-full border border-cyan-400/30 w-[36px] h-[36px] flex items-center justify-center">
-        <Moon className="w-4 h-4 text-gray-300" />
+      <div className="theme-toggle">
+        <Moon className="w-4 h-4" style={{ color: 'rgba(148,163,184,0.9)' }} />
       </div>
     );
   }
 
   return (
     <motion.button
-      whileHover={{ scale: 1.1, rotate: 15 }}
-      whileTap={{ scale: 0.9 }}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.96 }}
       onClick={toggleTheme}
-      className="p-2 rounded-full border border-cyan-400/30 text-gray-300 hover:text-cyan-400 hover:border-cyan-400/50 hover:bg-cyan-400/10 transition-all relative overflow-hidden"
+      className="theme-toggle relative overflow-hidden"
       aria-label={`Switch to ${resolvedTheme === 'dark' ? 'light' : 'dark'} mode`}
     >
       <motion.div
@@ -46,9 +46,9 @@ export default function ThemeToggle() {
         className="absolute inset-0 flex items-center justify-center"
       >
         {resolvedTheme === 'dark' ? (
-          <Sun className="w-4 h-4 text-cyan-400" />
+          <Sun className="w-4 h-4" style={{ color: 'var(--accent)' }} />
         ) : (
-          <Moon className="w-4 h-4 text-cyan-400" />
+          <Moon className="w-4 h-4" style={{ color: 'var(--accent)' }} />
         )}
       </motion.div>
     </motion.button>

@@ -69,16 +69,16 @@ export default function About() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 glass rounded-full border border-cyan-400/20 mb-6">
             <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse" />
-            <span className="text-xs font-medium text-cyan-400 uppercase tracking-wider">
+            <span className="type-caption text-cyan-400">
               {t('status')}
             </span>
           </div>
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 font-display relative">
-            <span className="relative z-10 text-neon-cyan">
+          <h2 className="type-h1 mb-5 font-display relative heading-luminous">
+            <span className="relative z-10 text-white">
               {t('title')}
             </span>
           </h2>
-          <p className="text-lg sm:text-xl text-gray-400 max-w-3xl mx-auto font-light leading-relaxed">
+          <p className="type-body max-w-3xl mx-auto">
             {config.personalInfo.bio}
           </p>
         </motion.div>
