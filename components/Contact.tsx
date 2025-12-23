@@ -4,13 +4,16 @@ import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { Send, Mail, MapPin, Phone, CheckCircle, AlertCircle } from 'lucide-react';
-import { useLocalizedConfig } from '@/hooks/useLocalizedConfig';
 import Section3DBackground from '@/components/3D/Section3DBackground';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import type { Profile } from '@/lib/db/types';
 
-export default function Contact() {
+interface ContactProps {
+  profile: Profile | null;
+}
+
+export default function Contact({ profile }: ContactProps) {
   const t = useTranslations('contact');
-  const config = useLocalizedConfig();
   const { ref, isInView } = useScrollAnimation({ threshold: 0.1 });
   const [formData, setFormData] = useState({
     name: '',
@@ -43,11 +46,11 @@ export default function Contact() {
           const retryAfter = response.headers.get('Retry-After');
           throw new Error(`Too many requests. Please try again in ${retryAfter || 'a few'} seconds.`);
         }
-        
+
         if (data.errors && Array.isArray(data.errors)) {
           throw new Error(data.errors.join(', '));
         }
-        
+
         throw new Error(data.error || 'Failed to send message');
       }
 
@@ -71,15 +74,15 @@ export default function Contact() {
   };
 
   const contactInfo = [
-    { icon: Mail, label: t('info.email'), value: config.personalInfo.email, color: 'cyan' },
-    { icon: Phone, label: t('info.phone'), value: config.personalInfo.phone || t('info.notProvided'), color: 'blue' },
-    { icon: MapPin, label: t('info.location'), value: config.personalInfo.location, color: 'purple' },
+    { icon: Mail, label: t('info.email'), value: profile?.email || 'Not provided', color: 'cyan' },
+    { icon: Phone, label: t('info.phone'), value: profile?.phone || t('info.notProvided'), color: 'blue' },
+    { icon: MapPin, label: t('info.location'), value: profile?.location || 'Remote', color: 'purple' },
   ];
 
   return (
     <section id="contact" className="relative py-24 md:py-32 overflow-hidden" ref={ref}>
       {/* 3D Background */}
-      <Section3DBackground 
+      <Section3DBackground
         intensity={0.25}
         layerCount={3}
         blockCount={6}
@@ -87,7 +90,7 @@ export default function Contact() {
         planeCount={2}
         className="opacity-40"
       />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <motion.div
@@ -126,7 +129,7 @@ export default function Contact() {
               const Icon = info.icon;
               return (
                 <motion.div
-                  key={info.label}
+                  key={index}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -178,7 +181,7 @@ export default function Contact() {
                   placeholder={t('placeholders.name')}
                 />
               </div>
-              
+
               {/* Email Field */}
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2 uppercase tracking-wider">
@@ -195,7 +198,7 @@ export default function Contact() {
                   placeholder={t('placeholders.email')}
                 />
               </div>
-              
+
               {/* Message Field */}
               <div>
                 <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2 uppercase tracking-wider">
@@ -212,7 +215,7 @@ export default function Contact() {
                   placeholder={t('placeholders.message')}
                 />
               </div>
-              
+
               {/* Submit Button */}
               <button
                 type="submit"
@@ -242,7 +245,7 @@ export default function Contact() {
                   )}
                 </span>
               </button>
-              
+
               {/* Error Message */}
               {status === 'error' && (
                 <motion.div

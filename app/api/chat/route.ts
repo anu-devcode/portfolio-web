@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { validateChatMessage, sanitizeInput } from '@/lib/validation';
 import { rateLimit, getClientIdentifier } from '@/lib/rateLimit';
-import { chatStorage } from '@/lib/storage';
+import { ChatRepository } from '@/lib/db/repositories/chat';
 import { logger } from '@/lib/logger';
 import { defaultConfig } from '@/config/site.config';
 
-// Enhanced AI response system
+// Enhanced AI response system (keeping existing logic)
 const AI_RESPONSES = {
   greetings: [
     "Hello! I'm here to help you learn more about the portfolio and answer any questions.",
@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
     // Validate message
     const sanitizedMessage = sanitizeInput(message || '');
     const validation = validateChatMessage(sanitizedMessage);
-    
+
     if (!validation.valid) {
       return NextResponse.json(
         { error: 'Validation failed', errors: validation.errors },
@@ -110,12 +110,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Session management
+    let activeSessionId = sessionId;
+
+    if (!activeSessionId) {
+      // Create new session
+      activeSessionId = `session-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+      await ChatRepository.createSession(activeSessionId, clientId);
+    } else {
+      // Check if session exists in DB, if not recreate it
+      // This handles cases where client has an ID but server (DB) was reset
+      const existingSession = await ChatRepository.getSession(activeSessionId);
+      if (!existingSession) {
+        await ChatRepository.createSession(activeSessionId, clientId);
+      }
+    }
+
     // Save user message
-    await chatStorage.save({
-      role: 'user',
-      content: sanitizedMessage,
-      sessionId: sessionId || `session-${Date.now()}`,
-    });
+    await ChatRepository.addMessage(activeSessionId, 'user', sanitizedMessage);
 
     // Generate AI response
     let aiResponse: string;
@@ -164,16 +176,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Save AI response
-    await chatStorage.save({
-      role: 'assistant',
-      content: aiResponse,
-      sessionId: sessionId || `session-${Date.now()}`,
-    });
+    await ChatRepository.addMessage(activeSessionId, 'assistant', aiResponse);
 
     return NextResponse.json(
       {
         response: aiResponse,
-        sessionId: sessionId || `session-${Date.now()}`,
+        sessionId: activeSessionId,
       },
       {
         status: 200,

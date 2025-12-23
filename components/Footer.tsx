@@ -4,18 +4,21 @@ import { useTranslations } from 'next-intl';
 import { Github, Linkedin, Twitter, Mail, MapPin, Phone, Heart } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Link } from '@/i18n/routing';
-import { useLocalizedConfig } from '@/hooks/useLocalizedConfig';
+import type { Profile } from '@/lib/db/types';
 
-export default function Footer() {
+interface FooterProps {
+  profile: Profile | null;
+}
+
+export default function Footer({ profile }: FooterProps) {
   const t = useTranslations('footer');
-  const config = useLocalizedConfig();
   const tNav = useTranslations('nav');
-  
+
   const socialLinks = [
-    { icon: Github, href: config.social.github || '#', label: 'GitHub' },
-    { icon: Linkedin, href: config.social.linkedin || '#', label: 'LinkedIn' },
-    { icon: Twitter, href: config.social.twitter || '#', label: 'Twitter' },
-  ].filter(link => link.href !== '#');
+    { icon: Github, href: profile?.social_links?.github || '#', label: 'GitHub' },
+    { icon: Linkedin, href: profile?.social_links?.linkedin || '#', label: 'LinkedIn' },
+    { icon: Twitter, href: profile?.social_links?.twitter || '#', label: 'Twitter' },
+  ].filter(link => link.href && link.href !== '#');
 
   const quickLinks = [
     { href: '/#about', label: tNav('about') },
@@ -25,9 +28,9 @@ export default function Footer() {
   ];
 
   const contactInfo = [
-    { icon: Mail, text: config.personalInfo.email, href: `mailto:${config.personalInfo.email}` },
-    { icon: Phone, text: config.personalInfo.phone, href: `tel:${config.personalInfo.phone}` },
-    { icon: MapPin, text: config.personalInfo.location },
+    { icon: Mail, text: profile?.email, href: profile?.email ? `mailto:${profile.email}` : undefined },
+    { icon: Phone, text: profile?.phone, href: profile?.phone ? `tel:${profile.phone}` : undefined },
+    { icon: MapPin, text: profile?.location, href: undefined },
   ].filter(item => item.text);
 
   return (
@@ -43,10 +46,10 @@ export default function Footer() {
             className="sm:col-span-2 lg:col-span-1"
           >
             <h3 className="text-2xl font-bold text-text mb-4 bg-gradient-to-r from-accent to-accent-strong bg-clip-text text-transparent">
-              {config.personalInfo.name}
+              {profile?.name || 'Portfolio'}
             </h3>
             <p className="text-muted text-sm leading-relaxed mb-6">
-              {config.personalInfo.bio}
+              {profile?.bio || t('ctaText')}
             </p>
             <div className="flex gap-3">
               {socialLinks.map((social) => {
@@ -159,7 +162,7 @@ export default function Footer() {
               viewport={{ once: true }}
               className="text-muted text-xs sm:text-sm text-center sm:text-left"
             >
-              &copy; {new Date().getFullYear()} {config.personalInfo.name}. {t('rights')}
+              &copy; {new Date().getFullYear()} {profile?.name || 'Portfolio'}. {t('rights')}
             </motion.p>
             <motion.p
               initial={{ opacity: 0 }}
@@ -167,7 +170,7 @@ export default function Footer() {
               viewport={{ once: true }}
               className="text-muted text-xs flex items-center gap-1"
             >
-              {t('madeWith')} <Heart className="w-3 h-3 text-red-500 fill-current" /> {t('by')} {config.personalInfo.name}
+              {t('madeWith')} <Heart className="w-3 h-3 text-red-500 fill-current" /> {t('by')} {profile?.name || 'Developer'}
             </motion.p>
           </div>
         </div>

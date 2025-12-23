@@ -3,13 +3,17 @@
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import { Code, Users, Calendar, MapPin, Award } from 'lucide-react';
-import { useLocalizedConfig } from '@/hooks/useLocalizedConfig';
 import Section3DBackground from '@/components/3D/Section3DBackground';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import type { Profile, WorkExperience } from '@/lib/db/types';
 
-export default function About() {
+interface AboutProps {
+  profile: Profile | null;
+  workExperiences: WorkExperience[];
+}
+
+export default function About({ profile, workExperiences }: AboutProps) {
   const t = useTranslations('about');
-  const config = useLocalizedConfig();
   const { ref, isInView } = useScrollAnimation({ threshold: 0.1 });
 
   const stats = [
@@ -19,31 +23,23 @@ export default function About() {
     { icon: Award, value: '15+', label: t('stats.technologies') },
   ];
 
-  const journey = [
-    {
-      year: '2023',
-      title: t('journey.current.title'),
-      description: t('journey.current.description'),
-      status: 'current'
-    },
-    {
-      year: '2022',
-      title: t('journey.started.title'),
-      description: t('journey.started.description'),
-      status: 'completed'
-    },
-    {
-      year: '2021',
-      title: t('journey.education.title'),
-      description: t('journey.education.description'),
-      status: 'completed'
-    },
-  ];
+  // Map database work experiences to journey format
+  const journey = workExperiences.map(exp => {
+    const startYear = exp.start_date ? new Date(exp.start_date).getFullYear().toString() : '';
+    return {
+      year: startYear,
+      title: `${exp.position} @ ${exp.company}`,
+      description: exp.description || '',
+      status: exp.current ? 'current' : 'completed'
+    };
+  });
+
+  // If no DB data, provide fallback or empty (keeping empty is safer than hardcoded outdated info)
 
   return (
     <section id="about" className="relative py-24 md:py-32 overflow-hidden" ref={ref}>
       <Section3DBackground intensity={0.3} className="opacity-40" />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <motion.div
@@ -117,9 +113,8 @@ export default function About() {
                 {t('bio.title')}
               </h3>
               <div className="space-y-4 type-body text-gray-300 leading-relaxed">
-                <p>{t('bio.paragraph1')}</p>
-                <p>{t('bio.paragraph2')}</p>
-                <p>{t('bio.paragraph3')}</p>
+                <p>{profile?.bio || t('bio.paragraph1')}</p>
+                {/* Fallback to translation placeholders if bio is short or single paragraph */}
               </div>
               <div className="mt-6 flex flex-wrap gap-2">
                 {['Problem Solver', 'Team Player', 'Continuous Learner', 'Innovation Focused'].map((trait) => (
@@ -148,9 +143,9 @@ export default function About() {
                 {t('journey.title')}
               </h3>
               <div className="space-y-6">
-                {journey.map((item, index) => (
+                {journey.length > 0 ? journey.map((item, index) => (
                   <motion.div
-                    key={item.year}
+                    key={index}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -158,11 +153,10 @@ export default function About() {
                     className="flex gap-4 group/item"
                   >
                     <div className="flex flex-col items-center">
-                      <div className={`w-3 h-3 rounded-full border-2 transition-all duration-300 ${
-                        item.status === 'current' 
-                          ? 'bg-cyan-400 border-cyan-400 animate-pulse shadow-glow-cyan' 
+                      <div className={`w-3 h-3 rounded-full border-2 transition-all duration-300 ${item.status === 'current'
+                          ? 'bg-cyan-400 border-cyan-400 animate-pulse shadow-glow-cyan'
                           : 'bg-gray-600 border-gray-500 group-hover/item:border-cyan-400/50'
-                      }`} />
+                        }`} />
                       {index < journey.length - 1 && (
                         <div className="w-px h-16 bg-gradient-to-b from-gray-600 to-gray-700 mt-2 group-hover/item:from-cyan-400/30 group-hover/item:to-gray-600 transition-all duration-300" />
                       )}
@@ -180,7 +174,11 @@ export default function About() {
                       <p className="text-gray-400 type-body">{item.description}</p>
                     </div>
                   </motion.div>
-                ))}
+                )) : (
+                  <div className="text-center text-gray-400 py-10">
+                    No work experience entries found.
+                  </div>
+                )}
               </div>
             </div>
             <motion.div className="absolute inset-0 rounded-2xl glow-blue opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />

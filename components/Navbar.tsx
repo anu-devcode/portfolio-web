@@ -7,7 +7,6 @@ import { Menu, X, Globe } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import ThemeToggle from "./ThemeToggle";
-import { useLocalizedConfig } from "@/hooks/useLocalizedConfig";
 import { useLanguagePreference } from "@/hooks/useLanguagePreference";
 
 interface NavItemProps {
@@ -52,7 +51,6 @@ export default function Navbar(): JSX.Element {
   const t = useTranslations("nav");
   const locale = useLocale();
   const pathname = usePathname();
-  const config = useLocalizedConfig();
   const { switchLanguage } = useLanguagePreference();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -72,9 +70,9 @@ export default function Navbar(): JSX.Element {
 
   const handleScroll = useCallback(() => {
     setIsScrolled(window.scrollY > 20);
-    
+
     if (!isHomePage) return;
-    
+
     const sections = ['about', 'services', 'projects', 'contact'];
     const current = sections.find(section => {
       const element = document.getElementById(section);
@@ -82,7 +80,7 @@ export default function Navbar(): JSX.Element {
       const rect = element.getBoundingClientRect();
       return rect.top <= 100 && rect.bottom > 100;
     });
-    
+
     setActiveSection(current || (window.scrollY < 100 ? 'home' : activeSection));
   }, [isHomePage, activeSection]);
 
@@ -119,7 +117,7 @@ export default function Navbar(): JSX.Element {
 
   const handleNavClick = useCallback((href: string) => {
     setIsOpen(false);
-    
+
     if (href.includes('#')) {
       const id = href.split('#')[1];
       const element = document.getElementById(id);
@@ -139,19 +137,19 @@ export default function Navbar(): JSX.Element {
 
   return (
     <>
-      <header 
+      <header
         className={`
           fixed top-0 left-0 right-0 z-50 transition-all duration-300
           ${isScrolled || isOpen || !isHomePage
-            ? 'bg-surface/95 backdrop-blur-md border-b border-[var(--border)] shadow-sm' 
+            ? 'bg-surface/95 backdrop-blur-md border-b border-[var(--border)] shadow-sm'
             : 'bg-transparent'
           }
         `}
       >
         <nav className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-16">
-            <Link 
-              href="/" 
+            <Link
+              href="/"
               className="flex items-center group"
             >
               <div className="relative w-10 h-10 sm:w-12 sm:h-12 transition-transform duration-300 group-hover:scale-105">
@@ -187,7 +185,7 @@ export default function Navbar(): JSX.Element {
               >
                 {t('hire')}
               </Link>
-              
+
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => switchLanguage(locale === 'en' ? 'am' : 'en')}
@@ -236,7 +234,7 @@ export default function Navbar(): JSX.Element {
                   {item.label}
                 </NavItem>
               ))}
-              
+
               <div className="pt-4 mt-4 border-t border-[var(--border)] space-y-3">
                 <Link
                   href="/#contact"
@@ -245,7 +243,7 @@ export default function Navbar(): JSX.Element {
                 >
                   {t('hire')}
                 </Link>
-                
+
                 <button
                   onClick={() => switchLanguage(locale === 'en' ? 'am' : 'en')}
                   className="flex items-center justify-center space-x-2 w-full px-4 py-2.5 rounded-lg text-muted opacity-100 hover:text-text bg-surface/50 hover:bg-surface transition-colors duration-200"

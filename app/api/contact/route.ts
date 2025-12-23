@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { validateContactForm, sanitizeInput } from '@/lib/validation';
 import { rateLimit, getClientIdentifier } from '@/lib/rateLimit';
 import { getEmailService, formatContactEmail } from '@/lib/email';
-import { contactStorage } from '@/lib/storage';
+import { ContactRepository } from '@/lib/db/repositories/contact';
 import { logger } from '@/lib/logger';
 import { defaultConfig } from '@/config/site.config';
 
@@ -53,12 +53,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Save to storage
-    const submission = await contactStorage.save({
+    // Save to database
+    // Note: The repository expects just the fields, no ID as it's generated
+    const submission = await ContactRepository.create({
       name: sanitizedData.name,
       email: sanitizedData.email,
       message: sanitizedData.message,
-      ip: clientId,
+      ip_address: clientId,
     });
 
     logger.info('Contact form submission received', {
@@ -68,6 +69,7 @@ export async function POST(request: NextRequest) {
 
     // Send email notification
     const emailService = getEmailService();
+    // Use default config for now, ideally this should come from DB config too
     const emailData = formatContactEmail({
       name: sanitizedData.name,
       email: sanitizedData.email,
@@ -136,7 +138,8 @@ export async function GET(request: NextRequest) {
     }
 
     const limit = parseInt(request.nextUrl.searchParams.get('limit') || '10');
-    const submissions = contactStorage.getRecent(limit);
+    // Using default offset 0
+    const submissions = await ContactRepository.getAll(limit, 0);
 
     return NextResponse.json({
       success: true,
@@ -151,4 +154,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-

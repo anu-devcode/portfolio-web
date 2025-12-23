@@ -15,14 +15,16 @@ import PageTransition from '@/components/PageTransition';
 import ScrollProgress from '@/components/ScrollProgress';
 import { generateMetadata } from './metadata';
 import { getTextDirection } from '@/lib/locale-utils';
+import { ProfileRepository } from '@/lib/db/repositories/profile';
+import type { Locale } from '@/lib/db/types';
 
-const inter = Inter({ 
+const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
 });
 
-const spaceGrotesk = Space_Grotesk({ 
+const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
   variable: '--font-space-grotesk',
   display: 'swap',
@@ -42,10 +44,13 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  
+
   if (!routing.locales.includes(locale as any)) {
     notFound();
   }
+
+  // Fetch profile data for the layout (Footer)
+  const profile = await ProfileRepository.getByLocale(locale as Locale);
 
   const messages = await getMessages();
 
@@ -101,27 +106,26 @@ export default async function LocaleLayout({
           }}
         />
       </head>
-          <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans`}>
-            <ThemeProvider>
-              <NextIntlClientProvider messages={messages}>
-                <SmoothScroll />
-                <ScrollProgress />
-                <PageTransition>
-                  <div className="min-h-screen flex flex-col relative">
-                    <NeuralBackground />
-                    <Navbar />
-                    <main className="flex-grow relative z-10" role="main">
-                      {children}
-                    </main>
-                    <Footer />
-                    <Chatbot />
-                    <ScrollToTop />
-                  </div>
-                </PageTransition>
-              </NextIntlClientProvider>
-            </ThemeProvider>
-          </body>
+      <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans`}>
+        <ThemeProvider>
+          <NextIntlClientProvider messages={messages}>
+            <SmoothScroll />
+            <ScrollProgress />
+            <PageTransition>
+              <div className="min-h-screen flex flex-col relative">
+                <NeuralBackground />
+                <Navbar />
+                <main className="flex-grow relative z-10" role="main">
+                  {children}
+                </main>
+                <Footer profile={profile} />
+                <Chatbot />
+                <ScrollToTop />
+              </div>
+            </PageTransition>
+          </NextIntlClientProvider>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
-
