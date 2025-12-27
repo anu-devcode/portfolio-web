@@ -4,12 +4,13 @@ A modern, high-performance portfolio website built with Next.js 14, featuring 3D
 
 ## ✨ Features
 
-- 🌍 **Multilingual Support** - English, Amharic, and Arabic
+- 🌍 **Multilingual Support** - English, and Amharic
 - 🤖 **AI Chatbot** - Context-aware assistant powered by OpenAI
 - 🎨 **3D Graphics** - Interactive Three.js scenes
 - ⚡ **High Performance** - Optimized with lazy loading and caching
 - 📱 **Fully Responsive** - Mobile-first design
 - 🔐 **Admin Panel** - Complete content management system
+  /not public
 - 🌓 **Dark/Light Mode** - Theme switching with smooth transitions
 
 ## 🚀 Tech Stack
