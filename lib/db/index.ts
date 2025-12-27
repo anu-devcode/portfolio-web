@@ -38,7 +38,7 @@ export async function query<T = any>(
     const duration = Date.now() - start;
 
     if (process.env.NODE_ENV === 'development') {
-      console.log('Executed query', { text, duration, rows: res.rowCount });
+      console.log('Executed query', { text, params, duration, rows: res.rowCount });
     }
 
     return res.rows;

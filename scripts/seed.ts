@@ -188,7 +188,7 @@ async function seed() {
         title: 'Backend Development',
         description: 'Building robust, scalable server-side systems with modern technologies.',
         icon: 'Server',
-        section_id: 'backend',
+        section_id: 'backend-en',
         features: ['API Design', 'Microservices', 'Auth Systems'],
         tech: ['Node.js', 'PostgreSQL', 'Docker']
       },
@@ -197,8 +197,26 @@ async function seed() {
         title: 'AI & Automation',
         description: 'Integrating intelligent features and automating complex workflows.',
         icon: 'Cpu',
-        section_id: 'ai-automation',
+        section_id: 'ai-automation-en',
         features: ['NLP Integration', 'Custom Bots', 'Workflow Optimization'],
+        tech: ['OpenAI', 'Python', 'LangChain']
+      },
+      {
+        locale: 'am',
+        title: 'የባክ-ኤንድ ልማት',
+        description: 'ዘመናዊ ቴክኖሎጂዎችን በመጠቀም ጠንካራ እና ሊሰፉ የሚችሉ የአገልጋይ ሲስተሞችን መገንባት።',
+        icon: 'Server',
+        section_id: 'backend-am',
+        features: ['የኤፒአይ ዲዛይን', 'ማይክሮ ሰርቪስ', 'የደህንነት ሲስተሞች'],
+        tech: ['Node.js', 'PostgreSQL', 'Docker']
+      },
+      {
+        locale: 'am',
+        title: 'ሰው ሰራሽ ብልሃት እና አውቶሜሽን',
+        description: 'ብልህ ባህሪያትን ማቀናጀት እና ውስብስብ የስራ ሂደቶችን በራስ-ሰር መስራት።',
+        icon: 'Cpu',
+        section_id: 'ai-automation-am',
+        features: ['የቋንቋ ሞዴል ቅንጅት', 'ብጁ ቦቶች', 'የስራ ሂደት ማሻሻል'],
         tech: ['OpenAI', 'Python', 'LangChain']
       }
     ];
@@ -226,7 +244,11 @@ async function seed() {
       { locale: 'en', name: 'TypeScript', category: 'Frontend', icon: 'Code', color: '#3178C6', level: 90 },
       { locale: 'en', name: 'React', category: 'Frontend', icon: 'Layout', color: '#61DAFB', level: 85 },
       { locale: 'en', name: 'Node.js', category: 'Backend', icon: 'Server', color: '#339933', level: 88 },
-      { locale: 'en', name: 'PostgreSQL', category: 'Database', icon: 'Database', color: '#336791', level: 85 }
+      { locale: 'en', name: 'PostgreSQL', category: 'Database', icon: 'Database', color: '#336791', level: 85 },
+      { locale: 'am', name: 'TypeScript', category: 'Frontend', icon: 'Code', color: '#3178C6', level: 90 },
+      { locale: 'am', name: 'React', category: 'Frontend', icon: 'Layout', color: '#61DAFB', level: 85 },
+      { locale: 'am', name: 'Node.js', category: 'Backend', icon: 'Server', color: '#339933', level: 88 },
+      { locale: 'am', name: 'PostgreSQL', category: 'Database', icon: 'Database', color: '#336791', level: 85 }
     ];
 
     for (const sk of skills) {
@@ -244,6 +266,15 @@ async function seed() {
         locale: 'en',
         title: 'Professional Portfolio',
         description: 'A multilingual portfolio with 3D elements and AI chat.',
+        live_url: 'https://portfolio.example.com',
+        github_url: 'https://github.com/anu-devcode/portfolio-web',
+        featured: true,
+        tech: ['Next.js', 'Three.js', 'PostgreSQL']
+      },
+      {
+        locale: 'am',
+        title: 'ፕሮፌሽናል ፖርትፎሊዮ',
+        description: 'ባለብዙ ቋንቋ፣ 3D ክፍሎች እና አርቴፊሻል ኢንተለጀንስ ቻት ያለው ፖርትፎሊዮ።',
         live_url: 'https://portfolio.example.com',
         github_url: 'https://github.com/anu-devcode/portfolio-web',
         featured: true,
@@ -269,6 +300,12 @@ async function seed() {
       `INSERT INTO work_experiences (locale, company, position, description, start_date, current)
       VALUES ($1, $2, $3, $4, $5, $6)`,
       ['en', 'Freelance', 'Full Stack Developer', 'Developing custom web applications and AI integrations.', '2023-01-01', true]
+    );
+
+    await query(
+      `INSERT INTO work_experiences (locale, company, position, description, start_date, current)
+      VALUES ($1, $2, $3, $4, $5, $6)`,
+      ['am', 'ፍሪላንስ', 'ሙሉ ሶፍትዌር አልሚ', 'ብጁ የድር መተግበሪያዎችን እና የሰው ሰራሽ ብልሃት ቅንጅቶችን ማልማት።', '2023-01-01', true]
     );
 
     console.log('✅ All data seeded successfully!');
