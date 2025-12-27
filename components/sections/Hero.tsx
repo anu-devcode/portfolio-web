@@ -2,25 +2,31 @@
 
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
-import * as LucideIcons from 'lucide-react';
+import { ArrowRight, Code, Database, Cpu, Cloud, Smartphone, Globe } from 'lucide-react';
 import { Link } from '@/i18n/routing';
-import dynamic from 'next/dynamic';
+import { createLazyComponent } from '@/components/common/LazyComponents';
 import TypingText from '@/components/ui/TypingText';
 import type { Profile, HeroData, HeroService } from '@/lib/db/types';
 
-const Hero3DScene = dynamic(() => import('@/components/3D/Hero3DScene'), {
-  ssr: false,
-  loading: () => <div className="absolute inset-0 bg-slate-900/20 animate-pulse rounded-3xl" />
-});
+// Lazy load 3D scenes only when hero section is in viewport
+const Hero3DScene = createLazyComponent(
+  () => import('@/components/3D/Hero3DScene'),
+  <div className="absolute inset-0 bg-gradient-to-br from-slate-900/40 via-slate-900/20 to-transparent animate-pulse rounded-3xl" />
+);
+
+const Literal3DScene = createLazyComponent(
+  () => import('@/components/3D/Literal3DScene'),
+  <div className="absolute inset-0 bg-gradient-to-br from-slate-900/40 via-slate-900/20 to-transparent animate-pulse rounded-3xl" />
+);
 
 interface HeroProps {
   profile: Profile | null;
   data: HeroData | null;
   heroServices: HeroService[];
+  hero3DScene?: 'abstract' | 'literal';
 }
 
-export default function Hero({ profile, data, heroServices }: HeroProps) {
+export default function Hero({ profile, data, heroServices, hero3DScene = 'abstract' }: HeroProps) {
   const t = useTranslations('hero');
 
   // Fallback roles if not available (could be moved to DB later)
@@ -34,7 +40,7 @@ export default function Hero({ profile, data, heroServices }: HeroProps) {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* 3D Background */}
-      <Hero3DScene />
+      {hero3DScene === 'abstract' ? <Hero3DScene /> : <Literal3DScene />}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
@@ -154,8 +160,11 @@ export default function Hero({ profile, data, heroServices }: HeroProps) {
             {/* Services Preview */}
             <div className="grid grid-cols-3 gap-2 sm:gap-4">
               {heroServices.map((service, index) => {
-                // Dynamic icon loading
-                const Icon = (LucideIcons as any)[service.icon || 'Code'] || LucideIcons.Code;
+                // Icon mapping for better tree-shaking
+                const iconMap: Record<string, any> = {
+                  Code, Database, Cpu, Cloud, Smartphone, Globe
+                };
+                const Icon = iconMap[service.icon || 'Code'] || Code;
 
                 return (
                   <Link key={service.id} href={service.href || '#'}>

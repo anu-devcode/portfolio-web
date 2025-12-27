@@ -1,19 +1,27 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, X, Send, Bot, Sparkles } from 'lucide-react';
+import { MessageCircle, X, Send, Bot, Sparkles, Trash2, RefreshCw } from 'lucide-react';
+import { useChat } from 'ai/react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 export default function Chatbot() {
   const t = useTranslations('chatbot');
+  const locale = useLocale();
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Array<{ role: 'user' | 'assistant'; content: string }>>([
-    { role: 'assistant', content: t('greeting') }
-  ]);
-  const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [sessionId] = useState(() => `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
+  const { messages, input, handleInputChange, handleSubmit, isLoading, setMessages, reload } = useChat({
+    api: '/api/chat',
+    initialMessages: [
+      { id: 'start', role: 'assistant', content: t('greeting') }
+    ],
+    body: {
+      locale: locale
+    }
+  });
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -24,52 +32,15 @@ export default function Chatbot() {
     scrollToBottom();
   }, [messages]);
 
-  const handleSend = async () => {
-    if (!input.trim() || isLoading) return;
-
-    const userMessage = input.trim();
-    setInput('');
-    setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
-    setIsLoading(true);
-
-    try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          message: userMessage,
-          sessionId: sessionId,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        if (response.status === 429) {
-          throw new Error(t('rateLimit'));
-        }
-        throw new Error(errorData.error || 'Failed to get response');
-      }
-
-      const data = await response.json();
-      setMessages(prev => [...prev, { role: 'assistant', content: data.response }]);
-    } catch (error) {
-      console.error('Chat error:', error);
-      setMessages(prev => [...prev, { 
-        role: 'assistant', 
-        content: error instanceof Error ? error.message : t('error')
-      }]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      handleSend();
+      handleSubmit(e as any);
     }
+  };
+
+  const clearChat = () => {
+    setMessages([{ id: 'start', role: 'assistant', content: t('greeting') }]);
   };
 
   return (
@@ -111,8 +82,8 @@ export default function Chatbot() {
       <AnimatePresence>
         {isOpen && (
           <>
-            <div 
-              className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm" 
+            <div
+              className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
               onClick={() => setIsOpen(false)}
             />
             <motion.div
@@ -146,9 +117,8 @@ export default function Chatbot() {
                 </button>
               </div>
 
-              {/* Messages */}
               <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-charcoal-900/30">
-                {messages.map((message, index) => (
+                {messages.map((message: any, index: number) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, y: 10 }}
@@ -156,13 +126,16 @@ export default function Chatbot() {
                     className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
                     <div
-                      className={`max-w-[80%] rounded-xl p-4 ${
-                        message.role === 'user'
-                          ? 'glass bg-cyan-400/10 border border-cyan-400/30 text-white'
-                          : 'glass-strong bg-charcoal-800/50 border border-cyan-400/20 text-gray-300'
-                      }`}
+                      className={`max-w-[85%] rounded-2xl p-4 shadow-xl ${message.role === 'user'
+                        ? 'glass bg-cyan-500/10 border border-cyan-400/30 text-white selection:bg-cyan-500/30'
+                        : 'glass-strong bg-charcoal-800/80 border border-cyan-400/10 text-gray-200'
+                        }`}
                     >
-                      <p className="text-sm font-light leading-relaxed">{message.content}</p>
+                      <div className="prose prose-invert prose-sm max-w-none prose-p:leading-relaxed prose-pre:bg-black/50 prose-code:text-cyan-400">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {message.content}
+                        </ReactMarkdown>
+                      </div>
                     </div>
                   </motion.div>
                 ))}
@@ -193,18 +166,18 @@ export default function Chatbot() {
                   <input
                     type="text"
                     value={input}
-                    onChange={(e) => setInput(e.target.value)}
+                    onChange={handleInputChange}
                     onKeyPress={handleKeyPress}
                     placeholder={t('placeholder')}
-                    className="flex-1 px-4 py-3 glass rounded-lg border border-cyan-400/20 focus:border-cyan-400/50 focus:outline-none bg-charcoal-800/50 text-white placeholder-gray-500 text-sm transition-all"
+                    className="flex-1 px-4 py-3 glass rounded-xl border border-cyan-400/20 focus:border-cyan-400/50 focus:outline-none bg-charcoal-800/50 text-white placeholder-gray-500 text-sm transition-all"
                     disabled={isLoading}
                   />
                   <motion.button
-                    onClick={handleSend}
+                    onClick={(e) => handleSubmit(e as any)}
                     disabled={isLoading || !input.trim()}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="px-4 py-3 glass rounded-lg border border-cyan-400/30 text-cyan-400 hover:border-cyan-400/60 hover:bg-cyan-400/10 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                    className="px-4 py-3 glass rounded-xl border border-cyan-400/30 text-cyan-400 hover:border-cyan-400/60 hover:bg-cyan-400/10 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg"
                     aria-label="Send message"
                   >
                     <Send className="w-5 h-5" />

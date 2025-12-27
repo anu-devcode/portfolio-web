@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Mesh } from 'three';
 import * as THREE from 'three';
@@ -20,12 +20,18 @@ export default function CodeBlock({ position, rotation = [0, 0, 0] }: CodeBlockP
     }
   });
 
-  const lines = [
+  const lines = useMemo(() => [
     { y: 0.6, width: 0.8 },
     { y: 0.2, width: 0.6 },
     { y: -0.2, width: 0.9 },
     { y: -0.6, width: 0.5 },
-  ];
+  ], []);
+
+  const highlights = useMemo(() => [
+    { x: -0.7, y: 0.6, color: '#8b5cf6' },
+    { x: -0.5, y: 0.2, color: '#ec4899' },
+    { x: 0.3, y: -0.2, color: '#10b981' },
+  ], []);
 
   return (
     <group ref={groupRef} position={position} rotation={rotation}>
@@ -57,11 +63,7 @@ export default function CodeBlock({ position, rotation = [0, 0, 0] }: CodeBlockP
       ))}
 
       {/* Syntax highlights */}
-      {[
-        { x: -0.7, y: 0.6, color: '#8b5cf6' },
-        { x: -0.5, y: 0.2, color: '#ec4899' },
-        { x: 0.3, y: -0.2, color: '#10b981' },
-      ].map((highlight, i) => (
+      {highlights.map((highlight, i) => (
         <mesh key={i} position={[highlight.x, highlight.y, 0.2]}>
           <boxGeometry args={[0.15, 0.08, 0.05]} />
           <meshStandardMaterial

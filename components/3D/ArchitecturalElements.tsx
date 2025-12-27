@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useRef, useMemo, useState, useEffect } from 'react';
+import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import { useTheme } from '@/components/layout/ThemeProvider';
 import ArchitecturalLayer from './objects/ArchitecturalLayer';
 import IsometricBlock from './objects/IsometricBlock';
 import SystemNode from './objects/SystemNode';
@@ -27,21 +28,8 @@ export default function ArchitecturalElements({
 }: ArchitecturalElementsProps) {
   const groupRef = useRef<THREE.Group>(null);
 
-  // Theme-aware opacity multiplier
-  const [isLight, setIsLight] = React.useState(false);
-  
-  React.useEffect(() => {
-    const checkTheme = () => {
-      setIsLight(document.documentElement.classList.contains('light'));
-    };
-    checkTheme();
-    const observer = new MutationObserver(checkTheme);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class'],
-    });
-    return () => observer.disconnect();
-  }, []);
+  const { resolvedTheme } = useTheme();
+  const isLight = resolvedTheme === 'light';
 
   // Opacity multiplier: adjusted for light mode visibility
   // Light mode needs significantly higher opacity to be visible on white background
@@ -128,6 +116,7 @@ export default function ArchitecturalElements({
           rotation={layer.rotation}
           size={layer.size}
           opacity={layer.opacity}
+          isLight={isLight}
         />
       ))}
 
@@ -139,6 +128,7 @@ export default function ArchitecturalElements({
           rotation={block.rotation}
           size={block.size}
           opacity={block.opacity}
+          isLight={isLight}
         />
       ))}
 
@@ -149,6 +139,7 @@ export default function ArchitecturalElements({
           position={node.position}
           size={node.size}
           opacity={node.opacity}
+          isLight={isLight}
         />
       ))}
 
@@ -161,6 +152,7 @@ export default function ArchitecturalElements({
           width={plane.width}
           height={plane.height}
           opacity={plane.opacity}
+          isLight={isLight}
         />
       ))}
     </group>

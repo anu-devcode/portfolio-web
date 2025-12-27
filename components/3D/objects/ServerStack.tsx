@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Mesh, Group } from 'three';
 import * as THREE from 'three';
@@ -20,11 +20,11 @@ export default function ServerStack({ position, rotation = [0, 0, 0] }: ServerSt
     }
   });
 
-  const servers = [
+  const servers = useMemo(() => [
     { y: 0, color: '#0066ff' },
     { y: 1.2, color: '#00d9ff' },
     { y: 2.4, color: '#8b5cf6' },
-  ];
+  ], []);
 
   return (
     <group ref={groupRef} position={position} rotation={rotation}>

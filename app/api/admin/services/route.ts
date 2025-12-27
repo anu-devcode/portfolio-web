@@ -27,14 +27,27 @@ export async function POST(request: Request) {
         const body = await request.json();
         const { action, id, data } = body;
 
-        // Repositories for Services currently have limited CRUD exposure in the wrapper
-        // We would expand ServicesRepository to include create/update/delete as needed.
+        if (action === 'create') {
+            const locale = body.locale || 'en';
+            const { features, technologies, ...serviceData } = data;
+            const service = await ServicesRepository.create(locale, serviceData, features, technologies);
+            return NextResponse.json({ success: true, data: service });
+        }
 
-        // For now, mirroring the structure
-        return NextResponse.json({
-            success: false,
-            error: 'Extended CRUD for Services coming soon'
-        }, { status: 501 });
+        if (action === 'update') {
+            if (!id) return NextResponse.json({ success: false, error: 'ID is required' }, { status: 400 });
+            const { features, technologies, ...serviceData } = data;
+            const service = await ServicesRepository.update(id, serviceData, features, technologies);
+            return NextResponse.json({ success: true, data: service });
+        }
+
+        if (action === 'delete') {
+            if (!id) return NextResponse.json({ success: false, error: 'ID is required' }, { status: 400 });
+            await ServicesRepository.delete(id);
+            return NextResponse.json({ success: true });
+        }
+
+        return NextResponse.json({ success: false, error: 'Invalid action' }, { status: 400 });
     } catch (error) {
         console.error('Admin Services POST Error:', error);
         return NextResponse.json(

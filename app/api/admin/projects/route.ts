@@ -29,13 +29,16 @@ export async function POST(request: Request) {
         const { action, id, data } = body;
 
         if (action === 'create') {
-            const project = await ProjectsRepository.create(data);
+            const locale = body.locale || 'en';
+            const { technologies, ...projectData } = data;
+            const project = await ProjectsRepository.create(locale, projectData, technologies);
             return NextResponse.json({ success: true, data: project });
         }
 
         if (action === 'update') {
             if (!id) return NextResponse.json({ success: false, error: 'ID is required' }, { status: 400 });
-            const project = await ProjectsRepository.update(id, data);
+            const { technologies, ...projectData } = data;
+            const project = await ProjectsRepository.update(id, projectData, technologies);
             return NextResponse.json({ success: true, data: project });
         }
 

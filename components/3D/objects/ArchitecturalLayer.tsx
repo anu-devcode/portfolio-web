@@ -10,6 +10,7 @@ interface ArchitecturalLayerProps {
   rotation?: [number, number, number];
   size?: number;
   opacity?: number;
+  isLight?: boolean;
 }
 
 /**
@@ -21,22 +22,9 @@ export default function ArchitecturalLayer({
   rotation = [0, 0, 0],
   size = 10,
   opacity = 0.15,
+  isLight = false,
 }: ArchitecturalLayerProps) {
   const meshRef = useRef<Mesh>(null);
-  const [isLight, setIsLight] = useState(false);
-
-  useEffect(() => {
-    const checkTheme = () => {
-      setIsLight(document.documentElement.classList.contains('light'));
-    };
-    checkTheme();
-    const observer = new MutationObserver(checkTheme);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class'],
-    });
-    return () => observer.disconnect();
-  }, []);
 
   useFrame((state) => {
     if (meshRef.current) {

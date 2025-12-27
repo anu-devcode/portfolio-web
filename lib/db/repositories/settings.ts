@@ -40,8 +40,9 @@ export class SettingsRepository {
                 `UPDATE site_settings SET 
           feature_ai_chatbot = $1, feature_projects = $2, 
           feature_blog = $3, feature_contact = $4,
-          theme_primary_color = $5, theme_accent_color = $6
-        WHERE locale = $7
+          theme_primary_color = $5, theme_accent_color = $6,
+          hero_3d_scene = $7, chatbot_system_prompt = $8, chatbot_model = $9
+        WHERE locale = $10
         RETURNING *`,
                 [
                     data.feature_ai_chatbot ?? existing.feature_ai_chatbot,
@@ -50,14 +51,17 @@ export class SettingsRepository {
                     data.feature_contact ?? existing.feature_contact,
                     data.theme_primary_color || existing.theme_primary_color,
                     data.theme_accent_color || existing.theme_accent_color,
+                    data.hero_3d_scene || existing.hero_3d_scene,
+                    data.chatbot_system_prompt ?? existing.chatbot_system_prompt,
+                    data.chatbot_model || existing.chatbot_model,
                     locale,
                 ]
             );
             return result[0];
         } else {
             const result = await query<SiteSettings>(
-                `INSERT INTO site_settings (locale, feature_ai_chatbot, feature_projects, feature_blog, feature_contact, theme_primary_color, theme_accent_color)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
+                `INSERT INTO site_settings (locale, feature_ai_chatbot, feature_projects, feature_blog, feature_contact, theme_primary_color, theme_accent_color, hero_3d_scene, chatbot_system_prompt, chatbot_model)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
         RETURNING *`,
                 [
                     locale,
@@ -67,6 +71,9 @@ export class SettingsRepository {
                     data.feature_contact ?? true,
                     data.theme_primary_color || 'blue',
                     data.theme_accent_color || 'cyan',
+                    data.hero_3d_scene || 'abstract',
+                    data.chatbot_system_prompt,
+                    data.chatbot_model || 'gpt-3.5-turbo',
                 ]
             );
             return result[0];

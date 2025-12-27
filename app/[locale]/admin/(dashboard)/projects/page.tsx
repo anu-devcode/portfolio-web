@@ -12,6 +12,7 @@ import {
     Edit,
     Star,
     Loader2,
+    Briefcase,
     Image as ImageIcon
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -29,7 +30,7 @@ export default function ProjectsManagement({ params }: { params: { locale: strin
     const fetchProjects = async () => {
         setIsLoading(true);
         try {
-            const res = await fetch(`/api/admin/projects?locale=${locale}`);
+            const res = await fetch(`/ api / admin / projects ? locale = ${locale} `);
             const data = await res.json();
             if (data.success) {
                 setProjects(data.data);

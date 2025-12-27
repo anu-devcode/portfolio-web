@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Mesh } from 'three';
 import * as THREE from 'three';
@@ -28,14 +28,14 @@ export default function NeuralNode({ position, size = 1 }: NeuralNodeProps) {
   });
 
   // Connection lines to other nodes
-  const connections = [
+  const connections = useMemo(() => [
     { angle: 0, length: 2 },
     { angle: Math.PI / 3, length: 1.8 },
     { angle: (2 * Math.PI) / 3, length: 2.2 },
     { angle: Math.PI, length: 1.9 },
     { angle: (4 * Math.PI) / 3, length: 2.1 },
     { angle: (5 * Math.PI) / 3, length: 2 },
-  ];
+  ], []);
 
   return (
     <group position={position}>

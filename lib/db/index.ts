@@ -1,9 +1,5 @@
-/**
- * PostgreSQL Database Connection
- * Feature-based, maintainable architecture
- */
-
 import { Pool, PoolClient, QueryResult } from 'pg';
+import { cache } from 'react';
 
 // Create connection pool
 const pool = new Pool({
@@ -26,12 +22,12 @@ pool.on('error', (err) => {
 });
 
 /**
- * Execute a query with error handling
+ * Execute a query with error handling and request-level caching
  */
-export async function query<T = any>(
+const queryInternal = async <T = any>(
   text: string,
   params?: any[]
-): Promise<T[]> {
+): Promise<T[]> => {
   const start = Date.now();
   try {
     const res = await pool.query(text, params);
@@ -46,7 +42,10 @@ export async function query<T = any>(
     console.error('Database query error:', error);
     throw error;
   }
-}
+};
+
+// Wrap with React cache for automatic request-level memoization
+export const query = cache(queryInternal);
 
 /**
  * Get a client from the pool for transactions

@@ -10,7 +10,8 @@ import {
     Bot,
     Loader2,
     CheckCircle,
-    AlertCircle
+    AlertCircle,
+    Box
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -130,6 +131,42 @@ export default function SettingsPage({ params }: { params: { locale: string } })
                     </div>
                 </section>
 
+                {/* 3D Visuals */}
+                <section className="bg-slate-900/50 border border-slate-800 rounded-3xl p-8">
+                    <div className="flex items-center gap-3 mb-8">
+                        <div className="p-2 bg-cyan-500/10 text-cyan-500 rounded-xl">
+                            <Box size={24} />
+                        </div>
+                        <h2 className="text-xl font-bold text-white">3D Hero Visuals</h2>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {[
+                            { id: 'abstract', label: 'Abstract Architectural', desc: 'Futuristic geometric layers and connections' },
+                            { id: 'literal', label: 'Literal System Objects', desc: '3D components like AI chips, servers, and nodes' },
+                        ].map((scene) => (
+                            <div
+                                key={scene.id}
+                                onClick={() => setSettings({ ...settings, hero_3d_scene: scene.id })}
+                                className={`flex items-start gap-4 p-4 rounded-2xl border cursor-pointer transition-all ${settings?.hero_3d_scene === scene.id
+                                    ? 'bg-cyan-500/10 border-cyan-500 text-white'
+                                    : 'bg-slate-950/50 border-slate-800/50 text-slate-400 hover:border-slate-700'
+                                    }`}
+                            >
+                                <div className="pt-1">
+                                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${settings?.hero_3d_scene === scene.id ? 'border-cyan-500' : 'border-slate-700'}`}>
+                                        {settings?.hero_3d_scene === scene.id && <div className="w-2.5 h-2.5 rounded-full bg-cyan-500" />}
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="font-medium text-white">{scene.label}</div>
+                                    <p className="text-slate-500 text-xs mt-1">{scene.desc}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
                 {/* SEO Metadata */}
                 <section className="bg-slate-900/50 border border-slate-800 rounded-3xl p-8">
                     <div className="flex items-center gap-3 mb-8">
@@ -191,8 +228,8 @@ export default function SettingsPage({ params }: { params: { locale: string } })
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: 20 }}
                                 className={`flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl mb-4 border ${message.type === 'success'
-                                        ? 'bg-emerald-500/90 border-emerald-400 text-white'
-                                        : 'bg-red-500/90 border-red-400 text-white'
+                                    ? 'bg-emerald-500/90 border-emerald-400 text-white'
+                                    : 'bg-red-500/90 border-red-400 text-white'
                                     } backdrop-blur-md`}
                             >
                                 {message.type === 'success' ? <CheckCircle size={20} /> : <AlertCircle size={20} />}

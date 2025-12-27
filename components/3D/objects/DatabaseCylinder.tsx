@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Mesh } from 'three';
 
@@ -20,13 +20,13 @@ export default function DatabaseCylinder({ position, rotation = [0, 0, 0] }: Dat
   });
 
   const segments = 8;
-  const dataRings = [
+  const dataRings = useMemo(() => [
     { y: -0.8, color: '#0066ff' },
     { y: -0.4, color: '#00d9ff' },
     { y: 0, color: '#8b5cf6' },
     { y: 0.4, color: '#ec4899' },
     { y: 0.8, color: '#00f0ff' },
-  ];
+  ], []);
 
   return (
     <group position={position} rotation={rotation}>

@@ -16,10 +16,10 @@ interface Scene3DProps {
   showControls?: boolean;
 }
 
-export default function Scene3D({ 
-  className = '', 
+export default function Scene3D({
+  className = '',
   intensity = 0.5,
-  showControls = false 
+  showControls = false
 }: Scene3DProps) {
   return (
     <div className={`absolute inset-0 ${className}`}>
@@ -60,21 +60,8 @@ export default function Scene3D({
 
           {/* Floating Particles */}
           <FloatingParticles count={50} />
-
-          {/* Controls (optional) */}
-          {showControls && (
-            <OrbitControls
-              enableZoom={false}
-              enablePan={false}
-              autoRotate
-              autoRotateSpeed={0.5}
-              minPolarAngle={Math.PI / 3}
-              maxPolarAngle={Math.PI / 1.5}
-            />
-          )}
         </Suspense>
       </Canvas>
     </div>
   );
 }
-

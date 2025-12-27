@@ -15,10 +15,8 @@ export async function GET(request: Request) {
 
         return NextResponse.json({
             success: true,
-            data: {
-                settings,
-                metadata
-            }
+            data: settings || {},
+            metadata: metadata || {}
         });
     } catch (error) {
         console.error('Admin Settings GET Error:', error);
@@ -35,7 +33,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const { locale, settings, metadata } = body;
+        const { locale, settings, metadata, chatbot_system_prompt, chatbot_model, ...directSettings } = body;
 
         if (!locale) {
             return NextResponse.json(
@@ -47,8 +45,16 @@ export async function POST(request: Request) {
         let updatedSettings = null;
         let updatedMetadata = null;
 
-        if (settings) {
-            updatedSettings = await SettingsRepository.upsertSettings(locale, settings);
+        // Merge direct settings with nested settings object
+        const settingsToUpdate = {
+            ...settings,
+            ...directSettings,
+            ...(chatbot_system_prompt !== undefined && { chatbot_system_prompt }),
+            ...(chatbot_model !== undefined && { chatbot_model })
+        };
+
+        if (Object.keys(settingsToUpdate).length > 0) {
+            updatedSettings = await SettingsRepository.upsertSettings(locale, settingsToUpdate);
         }
 
         if (metadata) {

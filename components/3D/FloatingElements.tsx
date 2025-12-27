@@ -21,15 +21,6 @@ interface FloatingElement {
  */
 export default function FloatingElements({ count = 5 }: { count?: number }) {
   const groupRef = useRef<THREE.Group>(null);
-  const [scrollY, setScrollY] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const elements: FloatingElement[] = useMemo(() => {
     return Array.from({ length: count }, (_, i) => ({
@@ -51,7 +42,10 @@ export default function FloatingElements({ count = 5 }: { count?: number }) {
   useFrame((state) => {
     if (groupRef.current) {
       groupRef.current.rotation.y += 0.001;
-      groupRef.current.position.y = scrollY * 0.0005;
+      // Access window.scrollY directly for better performance
+      if (typeof window !== 'undefined') {
+        groupRef.current.position.y = window.scrollY * 0.0005;
+      }
     }
   });
 

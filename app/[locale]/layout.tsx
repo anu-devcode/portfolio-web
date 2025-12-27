@@ -6,17 +6,34 @@ import { Inter, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import Chatbot from '@/components/chatbot/Chatbot';
 import ScrollToTop from '@/components/layout/ScrollToTop';
-import NeuralBackground from '@/components/backgrounds/NeuralBackground';
+import { DeferredLoad } from '@/components/common/LazyComponents';
+import dynamic from 'next/dynamic';
 import { ThemeProvider } from '@/components/layout/ThemeProvider';
-import SmoothScroll from '@/components/layout/SmoothScroll';
-import PageTransition from '@/components/transitions/PageTransition';
-import ScrollProgress from '@/components/layout/ScrollProgress';
+
+// Lazy load heavy client components
+const NeuralBackground = dynamic(() => import('@/components/backgrounds/NeuralBackground'), {
+  ssr: false,
+});
+
+const Chatbot = dynamic(() => import('@/components/chatbot/Chatbot'), {
+  ssr: false,
+});
+
+const SmoothScroll = dynamic(() => import('@/components/layout/SmoothScroll'), {
+  ssr: false,
+});
+
+const ScrollProgress = dynamic(() => import('@/components/layout/ScrollProgress'), {
+  ssr: false,
+});
+
+const PageTransition = dynamic(() => import('@/components/transitions/PageTransition'), {
+  ssr: false,
+});
 import { generateMetadata } from './metadata';
 import { getTextDirection } from '@/lib/locale-utils';
-import { ProfileRepository } from '@/lib/db/repositories/profile';
-import { SettingsRepository } from '@/lib/db/repositories/settings';
+import { getCachedProfile, getCachedSettings } from '@/lib/db/cache';
 import type { Locale } from '@/lib/db/types';
 
 const inter = Inter({
@@ -50,10 +67,10 @@ export default async function LocaleLayout({
     notFound();
   }
 
-  // Fetch data in parallel
+  // Fetch data in parallel with caching
   const [profile, settings] = await Promise.all([
-    ProfileRepository.getByLocale(locale as Locale),
-    SettingsRepository.getSettings(locale as Locale)
+    getCachedProfile(locale as Locale),
+    getCachedSettings(locale as Locale)
   ]);
 
   const messages = await getMessages();
@@ -78,14 +95,20 @@ export default async function LocaleLayout({
             <ScrollProgress />
             <PageTransition>
               <div className="min-h-screen flex flex-col relative">
-                <NeuralBackground />
+                <DeferredLoad delay={200}>
+                  <NeuralBackground />
+                </DeferredLoad>
                 <Navbar />
                 <main className="flex-grow relative z-10" role="main">
                   {children}
                 </main>
                 <Footer profile={profile} />
-                {settings?.feature_ai_chatbot && <Chatbot />}
-                <ScrollToTop />
+                <DeferredLoad delay={500}>
+                  {settings?.feature_ai_chatbot && <Chatbot />}
+                </DeferredLoad>
+                <DeferredLoad delay={300}>
+                  <ScrollToTop />
+                </DeferredLoad>
               </div>
             </PageTransition>
           </NextIntlClientProvider>

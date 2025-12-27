@@ -8,7 +8,13 @@ import {
     ExternalLink,
     LogOut,
     Code,
-    Sparkles
+    Sparkles,
+    User,
+    Zap,
+    Layers,
+    History,
+    MessageSquare,
+    Bot
 } from 'lucide-react';
 import { Link, usePathname } from '@/i18n/routing';
 import { useRouter } from 'next/navigation';
@@ -24,9 +30,15 @@ export default function Sidebar({ locale }: SidebarProps) {
 
     const menuItems = [
         { name: 'Dashboard', icon: LayoutDashboard, href: '/admin' },
+        { name: 'Profile', icon: User, href: '/admin/profile' },
+        { name: 'Hero Section', icon: Zap, href: '/admin/hero' },
+        { name: 'Services', icon: Layers, href: '/admin/services' },
+        { name: 'Skills', icon: Code, href: '/admin/skills' },
+        { name: 'Experience', icon: History, href: '/admin/experience' },
         { name: 'Projects', icon: Briefcase, href: '/admin/projects' },
-        { name: 'Skills & Services', icon: Code, href: '/admin/skills' },
-        { name: 'Site Settings', icon: Settings, href: '/admin/settings' },
+        { name: 'Chatbot', icon: Bot, href: '/admin/chatbot' },
+        { name: 'Messages', icon: MessageSquare, href: '/admin/messages' },
+        { name: 'Settings', icon: Settings, href: '/admin/settings' },
     ];
 
     const handleLogout = async () => {
@@ -55,8 +67,8 @@ export default function Sidebar({ locale }: SidebarProps) {
                             key={item.href}
                             href={item.href}
                             className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all group ${isActive
-                                    ? 'bg-cyan-500 text-slate-950 font-semibold'
-                                    : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+                                ? 'bg-cyan-500 text-slate-950 font-semibold'
+                                : 'text-slate-400 hover:bg-slate-800 hover:text-white'
                                 }`}
                         >
                             <Icon size={20} className={isActive ? '' : 'group-hover:scale-110 transition-transform'} />

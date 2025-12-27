@@ -9,6 +9,7 @@ interface SystemNodeProps {
   position?: [number, number, number];
   size?: number;
   opacity?: number;
+  isLight?: boolean;
 }
 
 /**
@@ -19,22 +20,9 @@ export default function SystemNode({
   position = [0, 0, 0],
   size = 0.15,
   opacity = 0.4,
+  isLight = false,
 }: SystemNodeProps) {
   const meshRef = useRef<Mesh>(null);
-  const [isLight, setIsLight] = useState(false);
-
-  useEffect(() => {
-    const checkTheme = () => {
-      setIsLight(document.documentElement.classList.contains('light'));
-    };
-    checkTheme();
-    const observer = new MutationObserver(checkTheme);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class'],
-    });
-    return () => observer.disconnect();
-  }, []);
 
   useFrame((state) => {
     if (meshRef.current) {

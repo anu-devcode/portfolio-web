@@ -11,6 +11,7 @@ interface ArchitecturalPlaneProps {
   width?: number;
   height?: number;
   opacity?: number;
+  isLight?: boolean;
 }
 
 /**
@@ -23,22 +24,9 @@ export default function ArchitecturalPlane({
   width = 8,
   height = 8,
   opacity = 0.08,
+  isLight = false,
 }: ArchitecturalPlaneProps) {
   const meshRef = useRef<Mesh>(null);
-  const [isLight, setIsLight] = useState(false);
-
-  useEffect(() => {
-    const checkTheme = () => {
-      setIsLight(document.documentElement.classList.contains('light'));
-    };
-    checkTheme();
-    const observer = new MutationObserver(checkTheme);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class'],
-    });
-    return () => observer.disconnect();
-  }, []);
 
   useFrame((state) => {
     if (meshRef.current) {

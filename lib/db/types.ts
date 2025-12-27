@@ -232,6 +232,9 @@ export interface SiteSettings {
   feature_contact: boolean;
   theme_primary_color: string;
   theme_accent_color: string;
+  hero_3d_scene: 'abstract' | 'literal';
+  chatbot_system_prompt: string | null;
+  chatbot_model: string | null;
   created_at: Date;
   updated_at: Date;
 }

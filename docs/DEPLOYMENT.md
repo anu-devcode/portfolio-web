@@ -258,3 +258,4 @@ For deployment issues, please:
 3. Open an issue on GitHub
 4. Check Next.js deployment documentation
 
+# open ai api key= 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
