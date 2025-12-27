@@ -33,6 +33,35 @@ CREATE TABLE IF NOT EXISTS profile (
   UNIQUE(locale)
 );
 
+-- Site settings for feature flags and theme
+CREATE TABLE IF NOT EXISTS site_settings (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  locale VARCHAR(10) NOT NULL DEFAULT 'en',
+  feature_ai_chatbot BOOLEAN DEFAULT true,
+  feature_projects BOOLEAN DEFAULT true,
+  feature_blog BOOLEAN DEFAULT true,
+  feature_contact BOOLEAN DEFAULT true,
+  theme_primary_color VARCHAR(50) DEFAULT 'blue',
+  theme_accent_color VARCHAR(50) DEFAULT 'cyan',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(locale)
+);
+
+-- SEO Metadata
+CREATE TABLE IF NOT EXISTS site_metadata (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  locale VARCHAR(10) NOT NULL DEFAULT 'en',
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  keywords TEXT[],
+  author VARCHAR(255),
+  og_image TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(locale)
+);
+
 -- Hero section data
 CREATE TABLE IF NOT EXISTS hero_data (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -256,7 +285,16 @@ $$ language 'plpgsql';
 CREATE TRIGGER update_profile_updated_at BEFORE UPDATE ON profile
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+CREATE TRIGGER update_site_settings_updated_at BEFORE UPDATE ON site_settings
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_site_metadata_updated_at BEFORE UPDATE ON site_metadata
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
 CREATE TRIGGER update_hero_data_updated_at BEFORE UPDATE ON hero_data
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_hero_services_updated_at BEFORE UPDATE ON hero_services
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 CREATE TRIGGER update_services_updated_at BEFORE UPDATE ON services
@@ -278,30 +316,6 @@ CREATE TRIGGER update_blog_posts_updated_at BEFORE UPDATE ON blog_posts
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE TRIGGER update_chat_sessions_updated_at BEFORE UPDATE ON chat_sessions
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();ted_at_column();
-
-CREATE TRIGGER update_hero_services_updated_at BEFORE UPDATE ON hero_services
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE TRIGGER update_services_updated_at BEFORE UPDATE ON services
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE TRIGGER update_skills_updated_at BEFORE UPDATE ON skills
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE TRIGGER update_projects_updated_at BEFORE UPDATE ON projects
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE TRIGGER update_work_experiences_updated_at BEFORE UPDATE ON work_experiences
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE TRIGGER update_certificates_updated_at BEFORE UPDATE ON certificates
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE TRIGGER update_blog_posts_updated_at BEFORE UPDATE ON blog_posts
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 CREATE TRIGGER update_chat_sessions_updated_at BEFORE UPDATE ON chat_sessions

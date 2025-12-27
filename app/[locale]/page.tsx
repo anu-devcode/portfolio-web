@@ -1,62 +1,40 @@
-import Hero from '@/components/Hero';
-import About from '@/components/About';
-import Services from '@/components/Services';
-import Projects from '@/components/Projects';
-import Contact from '@/components/Contact';
-
-// Repositories
-import { ProfileRepository } from '@/lib/db/repositories/profile';
-import { HeroRepository } from '@/lib/db/repositories/hero';
-import { ServicesRepository } from '@/lib/db/repositories/services';
-import { ProjectsRepository } from '@/lib/db/repositories/projects';
-import { getSkillsByCategory } from '@/lib/db/repositories/skills';
-import { getWorkExperiences } from '@/lib/db/repositories/work-experiences';
+import { Suspense } from 'react';
+import HeroSection from '@/components/sections/HeroSection';
+import AboutSection from '@/components/sections/AboutSection';
+import ServicesSection from '@/components/sections/ServicesSection';
+import ProjectsSection from '@/components/sections/ProjectsSection';
+import ContactSection from '@/components/sections/ContactSection';
+import { HeroSkeleton, SectionSkeleton } from '@/components/ui/Skeletons';
 import type { Locale } from '@/lib/db/types';
 
-export default async function Home({ params }: { params: { locale: string } }) {
-  const locale = params.locale as Locale;
+// Use Incremental Static Regeneration (ISR) with a 1-hour revalidation time
+export const revalidate = 3600;
 
-  // Fetch all data in parallel
-  const [
-    profile,
-    heroData,
-    heroServices,
-    services,
-    projects,
-    skillsByCategory,
-    workExperiences
-  ] = await Promise.all([
-    ProfileRepository.getByLocale(locale),
-    HeroRepository.getHeroData(locale),
-    HeroRepository.getHeroServices(locale),
-    ServicesRepository.getAll(locale),
-    ProjectsRepository.getAll(locale, true), // Featured projects only
-    getSkillsByCategory(locale),
-    getWorkExperiences(locale)
-  ]);
+export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  const l = locale as Locale;
 
   return (
     <>
-      <Hero
-        profile={profile}
-        data={heroData}
-        heroServices={heroServices}
-      />
-      <About
-        profile={profile}
-        workExperiences={workExperiences}
-      />
-      <Services
-        services={services}
-        skillsByCategory={skillsByCategory}
-      />
-      <Projects
-        projects={projects}
-      />
-      <Contact
-        profile={profile}
-      />
+      <Suspense fallback={<HeroSkeleton />}>
+        <HeroSection locale={l} />
+      </Suspense>
+
+      <Suspense fallback={<SectionSkeleton />}>
+        <AboutSection locale={l} />
+      </Suspense>
+
+      <Suspense fallback={<SectionSkeleton />}>
+        <ServicesSection locale={l} />
+      </Suspense>
+
+      <Suspense fallback={<SectionSkeleton />}>
+        <ProjectsSection locale={l} />
+      </Suspense>
+
+      <Suspense fallback={<SectionSkeleton />}>
+        <ContactSection locale={l} />
+      </Suspense>
     </>
   );
 }
-

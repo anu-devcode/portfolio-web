@@ -32,22 +32,18 @@ export async function verifyPassword(
  * Create a session for a user
  */
 export async function createSession(userId: string): Promise<string> {
-  const sessionId = crypto.randomUUID();
   const expiresAt = new Date(Date.now() + SESSION_DURATION * 1000);
-  
-  // Store session in database (you can create a sessions table if needed)
-  // For now, we'll use a simple cookie-based approach
-  
+
   const cookieStore = await cookies();
-  cookieStore.set(SESSION_COOKIE_NAME, sessionId, {
+  cookieStore.set(SESSION_COOKIE_NAME, userId, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     maxAge: SESSION_DURATION,
     path: '/',
   });
-  
-  return sessionId;
+
+  return userId;
 }
 
 /**
@@ -55,17 +51,27 @@ export async function createSession(userId: string): Promise<string> {
  */
 export async function getCurrentUser(): Promise<User | null> {
   const cookieStore = await cookies();
-  const sessionId = cookieStore.get(SESSION_COOKIE_NAME)?.value;
-  
-  if (!sessionId) {
+  const userId = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+
+  if (!userId) {
     return null;
   }
-  
-  // In a real implementation, you'd verify the session in the database
-  // For now, we'll check if there's a user_id in the session
-  // This is a simplified version - you should implement proper session management
-  
-  return null;
+
+  try {
+    const users = await query<User>(
+      'SELECT id, email, created_at, updated_at FROM users WHERE id = $1 LIMIT 1',
+      [userId]
+    );
+
+    if (users.length === 0) {
+      return null;
+    }
+
+    return users[0];
+  } catch (error) {
+    console.error('Get current user error:', error);
+    return null;
+  }
 }
 
 /**
@@ -77,23 +83,23 @@ export async function signIn(email: string, password: string): Promise<{ success
       'SELECT * FROM users WHERE email = $1 LIMIT 1',
       [email]
     );
-    
+
     if (users.length === 0) {
       return { success: false, error: 'Invalid email or password' };
     }
-    
+
     const user = users[0];
     const isValid = await verifyPassword(password, user.password_hash);
-    
+
     if (!isValid) {
       return { success: false, error: 'Invalid email or password' };
     }
-    
+
     await createSession(user.id);
-    
+
     // Remove password hash from response
     const { password_hash, ...userWithoutPassword } = user;
-    
+
     return { success: true, user: userWithoutPassword as User };
   } catch (error) {
     console.error('Sign in error:', error);
@@ -114,11 +120,11 @@ export async function signOut(): Promise<void> {
  */
 export async function requireAuth(): Promise<User> {
   const user = await getCurrentUser();
-  
+
   if (!user) {
     throw new Error('Unauthorized');
   }
-  
+
   return user;
 }
 

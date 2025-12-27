@@ -8,7 +8,9 @@ import { Pool, PoolClient, QueryResult } from 'pg';
 // Create connection pool
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+  ssl: process.env.NODE_ENV === 'production' && process.env.DB_SSL !== 'false'
+    ? { rejectUnauthorized: false }
+    : false,
   max: 20, // Maximum number of clients in the pool
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
@@ -34,11 +36,11 @@ export async function query<T = any>(
   try {
     const res = await pool.query(text, params);
     const duration = Date.now() - start;
-    
+
     if (process.env.NODE_ENV === 'development') {
       console.log('Executed query', { text, duration, rows: res.rowCount });
     }
-    
+
     return res.rows;
   } catch (error) {
     console.error('Database query error:', error);

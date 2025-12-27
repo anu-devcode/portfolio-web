@@ -3,7 +3,11 @@
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import { Code, Users, Calendar, MapPin, Award } from 'lucide-react';
-import Section3DBackground from '@/components/3D/Section3DBackground';
+import dynamic from 'next/dynamic';
+
+const Section3DBackground = dynamic(() => import('@/components/3D/Section3DBackground'), {
+  ssr: false
+});
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import type { Profile, WorkExperience } from '@/lib/db/types';
 
@@ -154,8 +158,8 @@ export default function About({ profile, workExperiences }: AboutProps) {
                   >
                     <div className="flex flex-col items-center">
                       <div className={`w-3 h-3 rounded-full border-2 transition-all duration-300 ${item.status === 'current'
-                          ? 'bg-cyan-400 border-cyan-400 animate-pulse shadow-glow-cyan'
-                          : 'bg-gray-600 border-gray-500 group-hover/item:border-cyan-400/50'
+                        ? 'bg-cyan-400 border-cyan-400 animate-pulse shadow-glow-cyan'
+                        : 'bg-gray-600 border-gray-500 group-hover/item:border-cyan-400/50'
                         }`} />
                       {index < journey.length - 1 && (
                         <div className="w-px h-16 bg-gradient-to-b from-gray-600 to-gray-700 mt-2 group-hover/item:from-cyan-400/30 group-hover/item:to-gray-600 transition-all duration-300" />

@@ -8,131 +8,86 @@ import { defaultConfig } from '@/config/site.config';
 // Enhanced AI response system (keeping existing logic)
 const AI_RESPONSES = {
   greetings: [
-    "Hello! I'm here to help you learn more about the portfolio and answer any questions.",
-    "Hi there! Feel free to ask me anything about the projects, skills, or experience.",
-    "Greetings! I'm your AI assistant. How can I help you today?",
+    `Hello! I'm the AI assistant for ${defaultConfig.personalInfo.name}'s portfolio. How can I help you today?`,
+    `Hi there! I can tell you about ${defaultConfig.personalInfo.name}'s projects, skills, or professional experience. What would you like to know?`,
+    "Greetings! Feel free to ask me anything about the work featured on this site.",
   ],
   portfolio: [
-    "This portfolio showcases various projects including backend development, AI systems, and full-stack applications. Would you like to know more about any specific project?",
-    "The portfolio features work in software engineering, AI, and automation. Check out the Projects section to see detailed examples.",
+    `${defaultConfig.personalInfo.name} specializes in Backend Engineering and AI. The portfolio features projects like this very website, which uses Next.js, PostgreSQL, and Three.js.`,
+    "You can find detailed information about various projects in the Projects section, ranging from AI automated systems to robust backend architectures.",
   ],
   skills: [
-    "The main skills include Backend Development (Node.js, Python), AI & Automation, Cloud & DevOps, and Full-Stack Development. Each area has multiple technologies and frameworks.",
-    "Key expertise areas are: Backend systems, AI/ML, Cloud infrastructure, and modern web development. You can see detailed technologies in the About section.",
+    `Key technical expertise includes: ${defaultConfig.personalInfo.bio}. Specific technologies used are Node.js, Python, PostgreSQL, and modern frontend frameworks.`,
+    "Technical stack overview: TypeScript for type-safety, React/Next.js for the interface, and PostgreSQL for data management. Extensive experience in AI integration and automation.",
   ],
   contact: [
-    `You can reach out via the contact form on this page, or email directly at ${defaultConfig.personalInfo.email}. I'm always open to discussing new opportunities!`,
-    "Feel free to use the contact form below or reach out through the social links in the footer. I'd love to hear from you!",
+    `You can reach ${defaultConfig.personalInfo.name} directly via email at ${defaultConfig.personalInfo.email} or use the contact form at the bottom of the page.`,
+    `Feel free to connect on LinkedIn or check out more code on GitHub. Links are available in the footer and contact section.`,
+  ],
+  identity: [
+    `I am an AI assistant specifically designed for ${defaultConfig.personalInfo.name}'s portfolio. I use a combination of local logic and OpenAI to provide accurate information.`,
+    `My purpose is to help visitors navigate this portfolio and learn more about ${defaultConfig.personalInfo.name}'s professional background.`,
   ],
   default: [
-    "That's an interesting question! Let me help you with that.",
-    "I'd be happy to provide more information about that.",
-    "Great question! Here's what I can tell you...",
-    "Thanks for asking! Let me share some insights...",
+    "That's an interesting question! While I focus on the portfolio details, I'd be happy to help if it relates to the work shown here.",
+    "I'm here to provide information about the projects and skills of the developer. If you have a specific question about those, please let me know!",
   ],
 };
 
 function generateAIResponse(userMessage: string): string {
   const message = userMessage.toLowerCase();
 
-  // Greeting detection
-  if (message.match(/\b(hi|hello|hey|greetings|good morning|good afternoon|good evening)\b/)) {
-    return AI_RESPONSES.greetings[
-      Math.floor(Math.random() * AI_RESPONSES.greetings.length)
-    ];
+  if (message.match(/\b(who are you|your name|what are you)\b/)) {
+    return AI_RESPONSES.identity[Math.floor(Math.random() * AI_RESPONSES.identity.length)];
+  }
+  if (message.match(/\b(hi|hello|hey|greetings|morning|evening)\b/)) {
+    return AI_RESPONSES.greetings[Math.floor(Math.random() * AI_RESPONSES.greetings.length)];
+  }
+  if (message.match(/\b(portfolio|project|work|build|making|made)\b/)) {
+    return AI_RESPONSES.portfolio[Math.floor(Math.random() * AI_RESPONSES.portfolio.length)];
+  }
+  if (message.match(/\b(skill|tech|stack|language|know|use|expertise|experience)\b/)) {
+    return AI_RESPONSES.skills[Math.floor(Math.random() * AI_RESPONSES.skills.length)];
+  }
+  if (message.match(/\b(contact|email|reach|hire|touch|call|phone|linkedin|github)\b/)) {
+    return AI_RESPONSES.contact[Math.floor(Math.random() * AI_RESPONSES.contact.length)];
   }
 
-  // Portfolio/projects detection
-  if (message.match(/\b(portfolio|project|work|showcase|what.*do|what.*build)\b/)) {
-    return AI_RESPONSES.portfolio[
-      Math.floor(Math.random() * AI_RESPONSES.portfolio.length)
-    ];
-  }
-
-  // Skills/technologies detection
-  if (message.match(/\b(skill|technology|tech|stack|framework|language|expertise|what.*know|what.*use)\b/)) {
-    return AI_RESPONSES.skills[
-      Math.floor(Math.random() * AI_RESPONSES.skills.length)
-    ];
-  }
-
-  // Contact detection
-  if (message.match(/\b(contact|email|reach|get.*touch|hire|collaborate|work.*together)\b/)) {
-    return AI_RESPONSES.contact[
-      Math.floor(Math.random() * AI_RESPONSES.contact.length)
-    ];
-  }
-
-  // Default response
-  return AI_RESPONSES.default[
-    Math.floor(Math.random() * AI_RESPONSES.default.length)
-  ];
+  return AI_RESPONSES.default[Math.floor(Math.random() * AI_RESPONSES.default.length)];
 }
 
 export async function POST(request: NextRequest) {
   try {
-    // Rate limiting
     const clientId = getClientIdentifier(request);
     const limit = rateLimit(`chat-${clientId}`, {
-      windowMs: 60 * 1000, // 1 minute
-      maxRequests: 20, // 20 requests per minute
+      windowMs: 60 * 1000,
+      maxRequests: 20,
     });
 
     if (!limit.allowed) {
-      return NextResponse.json(
-        {
-          error: 'Too many requests. Please slow down.',
-          retryAfter: Math.ceil((limit.resetTime - Date.now()) / 1000),
-        },
-        {
-          status: 429,
-          headers: {
-            'Retry-After': Math.ceil((limit.resetTime - Date.now()) / 1000).toString(),
-            'X-RateLimit-Limit': '20',
-            'X-RateLimit-Remaining': '0',
-            'X-RateLimit-Reset': new Date(limit.resetTime).toISOString(),
-          },
-        }
-      );
+      return NextResponse.json({ error: 'Too many requests. Please slow down.' }, { status: 429 });
     }
 
-    const body = await request.json();
-    const { message, sessionId } = body;
-
-    // Validate message
+    const { message, sessionId } = await request.json();
     const sanitizedMessage = sanitizeInput(message || '');
     const validation = validateChatMessage(sanitizedMessage);
 
     if (!validation.valid) {
-      return NextResponse.json(
-        { error: 'Validation failed', errors: validation.errors },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Validation failed', errors: validation.errors }, { status: 400 });
     }
 
-    // Session management
     let activeSessionId = sessionId;
-
     if (!activeSessionId) {
-      // Create new session
       activeSessionId = `session-${Date.now()}-${Math.random().toString(36).substring(7)}`;
       await ChatRepository.createSession(activeSessionId, clientId);
     } else {
-      // Check if session exists in DB, if not recreate it
-      // This handles cases where client has an ID but server (DB) was reset
       const existingSession = await ChatRepository.getSession(activeSessionId);
-      if (!existingSession) {
-        await ChatRepository.createSession(activeSessionId, clientId);
-      }
+      if (!existingSession) await ChatRepository.createSession(activeSessionId, clientId);
     }
 
-    // Save user message
     await ChatRepository.addMessage(activeSessionId, 'user', sanitizedMessage);
 
-    // Generate AI response
     let aiResponse: string;
-
-    // Check if OpenAI API key is available
     if (process.env.OPENAI_API_KEY) {
       try {
         const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -146,14 +101,16 @@ export async function POST(request: NextRequest) {
             messages: [
               {
                 role: 'system',
-                content: `You are a helpful AI assistant for ${defaultConfig.personalInfo.name}'s portfolio website. You help visitors learn about the portfolio, projects, and skills. Be friendly, concise, and professional.`,
+                content: `You are the professional AI assistant for ${defaultConfig.personalInfo.name}'s portfolio website. 
+                Owner Info: ${defaultConfig.personalInfo.title}, located in ${defaultConfig.personalInfo.location}.
+                Bio: ${defaultConfig.personalInfo.bio}.
+                Skills: Backend (Node.js, Python), AI, Cloud, Full-stack.
+                Contact: ${defaultConfig.personalInfo.email}.
+                Instructions: Be highly professional, concise, and helpful. Focus on the portfolio details.`,
               },
-              {
-                role: 'user',
-                content: sanitizedMessage,
-              },
+              { role: 'user', content: sanitizedMessage },
             ],
-            max_tokens: 150,
+            max_tokens: 200,
             temperature: 0.7,
           }),
         });
@@ -162,20 +119,16 @@ export async function POST(request: NextRequest) {
           const data = await openaiResponse.json();
           aiResponse = data.choices[0]?.message?.content || generateAIResponse(sanitizedMessage);
         } else {
-          // Fallback to local AI if OpenAI fails
           aiResponse = generateAIResponse(sanitizedMessage);
         }
       } catch (error) {
         logger.error('OpenAI API error', error);
-        // Fallback to local AI
         aiResponse = generateAIResponse(sanitizedMessage);
       }
     } else {
-      // Use local AI responses
       aiResponse = generateAIResponse(sanitizedMessage);
     }
 
-    // Save AI response
     await ChatRepository.addMessage(activeSessionId, 'assistant', aiResponse);
 
     return NextResponse.json(

@@ -4,18 +4,19 @@ import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { Inter, Space_Grotesk } from 'next/font/google';
 import './globals.css';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import Chatbot from '@/components/Chatbot';
-import ScrollToTop from '@/components/ScrollToTop';
-import NeuralBackground from '@/components/NeuralBackground';
-import { ThemeProvider } from '@/components/ThemeProvider';
-import SmoothScroll from '@/components/SmoothScroll';
-import PageTransition from '@/components/PageTransition';
-import ScrollProgress from '@/components/ScrollProgress';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
+import Chatbot from '@/components/chatbot/Chatbot';
+import ScrollToTop from '@/components/layout/ScrollToTop';
+import NeuralBackground from '@/components/backgrounds/NeuralBackground';
+import { ThemeProvider } from '@/components/layout/ThemeProvider';
+import SmoothScroll from '@/components/layout/SmoothScroll';
+import PageTransition from '@/components/transitions/PageTransition';
+import ScrollProgress from '@/components/layout/ScrollProgress';
 import { generateMetadata } from './metadata';
 import { getTextDirection } from '@/lib/locale-utils';
 import { ProfileRepository } from '@/lib/db/repositories/profile';
+import { SettingsRepository } from '@/lib/db/repositories/settings';
 import type { Locale } from '@/lib/db/types';
 
 const inter = Inter({
@@ -49,60 +50,24 @@ export default async function LocaleLayout({
     notFound();
   }
 
-  // Fetch profile data for the layout (Footer)
-  const profile = await ProfileRepository.getByLocale(locale as Locale);
+  // Fetch data in parallel
+  const [profile, settings] = await Promise.all([
+    ProfileRepository.getByLocale(locale as Locale),
+    SettingsRepository.getSettings(locale as Locale)
+  ]);
 
   const messages = await getMessages();
 
-  // Determine text direction: Only RTL languages should use RTL
-  // English (en) and Amharic (am) are both LTR languages
   const dir = getTextDirection(locale);
 
   return (
-    <html lang={locale} dir={dir}>
+    <html lang={locale} dir={dir} suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#0ea5e9" />
         <script
           dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  // Initialize theme
-                  const theme = localStorage.getItem('theme');
-                  const root = document.documentElement;
-                  if (theme === 'light') {
-                    root.classList.add('light');
-                    root.classList.remove('dark');
-                  } else if (theme === 'system') {
-                    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-                    root.classList.add(systemTheme);
-                    root.classList.remove('light', 'dark');
-                  } else {
-                    root.classList.add('dark');
-                    root.classList.remove('light');
-                  }
-                  
-                  // Initialize language preference
-                  const currentLocale = '${locale}';
-                  const storedLocale = localStorage.getItem('preferred-language');
-                  if (storedLocale && storedLocale !== currentLocale) {
-                    // Language preference exists but doesn't match current route
-                    // This will be handled by middleware on next navigation
-                  } else if (!storedLocale) {
-                    // Save current locale as preference
-                    localStorage.setItem('preferred-language', currentLocale);
-                    // Set cookie
-                    const expires = new Date();
-                    expires.setFullYear(expires.getFullYear() + 1);
-                    document.cookie = 'NEXT_LOCALE=' + currentLocale + '; expires=' + expires.toUTCString() + '; path=/; SameSite=Lax';
-                  }
-                } catch (e) {
-                  // Fallback to dark theme
-                  document.documentElement.classList.add('dark');
-                }
-              })();
-            `,
+            __html: `(function(){try{var t=localStorage.getItem("theme"),r=document.documentElement;if("light"===t)r.classList.add("light"),r.classList.remove("dark");else if("system"===t){var e=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";r.classList.add(e),r.classList.remove("light","dark")}else r.classList.add("dark"),r.classList.remove("light");var a="${locale}",c=localStorage.getItem("preferred-language");if(!c){localStorage.setItem("preferred-language",a);var n=new Date;n.setFullYear(n.getFullYear()+1),document.cookie="NEXT_LOCALE="+a+"; expires="+n.toUTCString()+"; path=/; SameSite=Lax"}}catch(o){document.documentElement.classList.add("dark")}})();`,
           }}
         />
       </head>
@@ -119,7 +84,7 @@ export default async function LocaleLayout({
                   {children}
                 </main>
                 <Footer profile={profile} />
-                <Chatbot />
+                {settings?.feature_ai_chatbot && <Chatbot />}
                 <ScrollToTop />
               </div>
             </PageTransition>

@@ -222,3 +222,29 @@ export interface ChatMessage {
   created_at: Date;
 }
 
+// Site settings types
+export interface SiteSettings {
+  id: string;
+  locale: Locale;
+  feature_ai_chatbot: boolean;
+  feature_projects: boolean;
+  feature_blog: boolean;
+  feature_contact: boolean;
+  theme_primary_color: string;
+  theme_accent_color: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
+// Site metadata types
+export interface SiteMetadata {
+  id: string;
+  locale: Locale;
+  title: string;
+  description: string | null;
+  keywords: string[];
+  author: string | null;
+  og_image: string | null;
+  created_at: Date;
+  updated_at: Date;
+}

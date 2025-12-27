@@ -4,7 +4,11 @@ import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import { ExternalLink, Github, ArrowUpRight } from 'lucide-react';
 import { useState } from 'react';
-import Section3DBackground from '@/components/3D/Section3DBackground';
+import dynamic from 'next/dynamic';
+
+const Section3DBackground = dynamic(() => import('@/components/3D/Section3DBackground'), {
+  ssr: false
+});
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import type { Project } from '@/lib/db/types';
 

@@ -5,9 +5,14 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
 import { Link } from '@/i18n/routing';
-import Hero3DScene from '@/components/3D/Hero3DScene';
-import TypingText from '@/components/TypingText';
+import dynamic from 'next/dynamic';
+import TypingText from '@/components/ui/TypingText';
 import type { Profile, HeroData, HeroService } from '@/lib/db/types';
+
+const Hero3DScene = dynamic(() => import('@/components/3D/Hero3DScene'), {
+  ssr: false,
+  loading: () => <div className="absolute inset-0 bg-slate-900/20 animate-pulse rounded-3xl" />
+});
 
 interface HeroProps {
   profile: Profile | null;
